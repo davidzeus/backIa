@@ -1,0 +1,120 @@
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+model_cache/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+ENV.bak/
+venv.bak/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Cython debug symbols
+cython_debug/
+
+# VS Code
+.vscode/
+
+# dotenv
+.env
+
+# FastAPI
+*.log
+
+# ollama cache
+ollama/
+
+# Jupyter
+.ipynb_checkpoints
+analisis_problema_metadata.md
+
+# Reqs de desarrollo (si decidís no versionarlos)
+requirements-dev.txt
+requirements-dev-*.txt
+requirements.local.txt
+
+# Reportes locales de pruebas
+reports/
+/hc_eval_runner.py
+
+# IDEs y linters extra
+.idea/
+.spyproject/
+.ruff_cache/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Uvicorn / SQLite locales
+uvicorn*.log
+*.sqlite3
+*.db
+
+# Reportes alternos
+/reports_*/
+
+
+
+NUL
+
+# Local Tests
+app/tests/
+
+# Scripts de Debug / Utilidades Locales
+borrar_paciente.py
+debug_*.py

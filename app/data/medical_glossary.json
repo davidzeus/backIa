@@ -1,0 +1,11 @@
+{
+    "PTZ": "Piperacilina + Tazobactam (Antibiótico). NO confundir con procedimientos.",
+    "ATB": "Antibiótico",
+    "POP": "Post-Operatorio. 'POP+1' significa 'Día 1 después de la cirugía'. 'POP Inmediato' es el día de la cirugía.",
+    "Dx": "Diagnóstico",
+    "Qx": "Quirúrgico / Cirugía",
+    "RHA": "Ruidos Hidroaéreos",
+    "TAM": "Tensión Arterial Media",
+    "SNG": "Sonda Nasogástrica",
+    "ARM": "Asistencia Respiratoria Mecánica"
+}

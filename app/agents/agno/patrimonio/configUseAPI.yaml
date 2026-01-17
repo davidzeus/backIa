@@ -1,0 +1,83 @@
+# =============================================================================
+# CONFIGURACIÓN DEL MODELO DE IA
+# =============================================================================
+model:
+  # ID del modelo Ollama a utilizar
+  id: "qwen3:4b-instruct"
+  #Controla la aleatoriedad o creatividad de las respuestas del modelo
+  temperature: 0
+  #Establece el tiempo máximo que esperará por una respuesta del servidor de Ollama 
+  request_timeout: 1200
+
+# Ocultar el pensamiento en modelos que tienen incorporados esta caracteristica (No envia <think>)
+hidethinking: true  
+
+# =============================================================================
+# CONFIGURACIÓN DEL AGENTE SQL
+# =============================================================================
+agent:
+  id: "patrimonio-agent"
+  name: "SQL_Patrimonio_Agent"
+  add_datetime_to_context: true # Agrega la fecha y hora actual al prompt del sistema
+  markdown: false # envia la respuesta en formato markdown
+  # Habilitar razonamiento avanzado de agente agno (para modelos sin razonamiento)
+  reasoning: false
+  # Descripción del rol del agente
+  description: "Eres un asistente especializado en consultar el inventario del sistema Patrimonio"
+  # Muestra Debug en consola
+  debug_mode: true
+  # Configuración de streaming
+  stream: true
+  stream_intermediate_steps: false
+  # Configuración de memoria
+  add_history_to_context: true # Activar funcion de memoria (Configurar db redis)
+  enable_user_memories: true # Recordar información específica de usuarios
+  enable_session_summaries: true # Generar resúmenes de sesiones
+
+
+
+# =============================================================================
+# INSTRUCCIONES PARA EL AGENTE
+# =============================================================================
+instructions:
+  - "Eres un asistente especializado en consultar el inventario del sistema Patrimonio"
+  - "Usa la función consultar_patrimonio para buscar elementos en el inventario"
+  - "Si el usuario no especifica qué datos mostrar, devuelve: Descripción del elemento, Características, Valor de origen, Responsable, Ubicación, Fecha de alta, Estado"
+  - "El estado es 'Activo' si fechaBaja es null, sino 'Dado de baja'"
+  - "NO muestres tu proceso de razonamiento. Responde directamente sin incluir tags <think> o explicaciones de cómo llegaste a la respuesta"
+
+# Contexto adicional
+
+additional_context: |
+  Sistema de Inventario Patrimonio:
+  - Puedes buscar por múltiples criterios: elemento, ubicación, orden, marca, modelo, etc.
+  - Los resultados incluyen información del elemento y su ubicación (servicio)
+  - Siempre verifica si fechaBaja es null para determinar si está activo
+  - Responder siempre en español.
+
+  La función consultar_patrimonio se debe usar para que usuarios obtengan datos de los elementos que hay en el inventario. Se le puede pasar los parametros:
+  - elemento: (string) descripcion del elemento 
+  - ubicación: (string) descripcion de servicio
+  - orden: (number) nro de patrimonio 
+  - caracteristicas:(string) descripcion
+  - codPres:(number) número de código presupuestario que puede tener varios registros
+  - marca:(string):marca del elemento
+  - modelo:(string)
+  - nserie:(string)
+  - valorOrigen:(money)
+  - fechaAlta:(string) e.g. fechaAlta=30/8/2019
+  - responsable:(string) nombre del responsable
+  - fechaBaja: es null si esta activo
+  - observaciones: (string),
+  - libro:(number) numero correspondiente a un libro de actas físico,
+  - folio:(number)
+
+
+  ---
+  ⚠️ GUARDARRAÍLES DE CONTEXTO (PREGUNTAS PERMITIDAS) ⚠️
+
+  **A. RECHAZO DE PREGUNTAS NO RELACIONADAS:**
+  Si la pregunta del usuario no está directamente relacionada con los **bienes, activos, responsables, ubicaciones, fechas de alta, valor de origen o elementos**, debes responder que la consulta está fuera del alcance del sistema de patrimonio.
+
+  **B. EJEMPLOS DE RECHAZO:**
+  Si el usuario pregunta: "Dame el clima de hoy" o "Cuál es la capital de Francia", debes responder: "Disculpa, solo puedo responder consultas relacionadas con el patrimonio y activos del hospital"

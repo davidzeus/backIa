@@ -1,0 +1,69 @@
+# Core FastAPI and server
+fastapi==0.117.1
+uvicorn[standard]==0.37.0
+pydantic==2.11.9
+
+# LlamaIndex core packages (versions that work together)
+llama-index-core==0.12.52.post1
+llama-index-llms-ollama==0.6.2
+llama-index-embeddings-huggingface==0.5.5
+llama-index-vector-stores-qdrant==0.6.1
+llama-index>=0.10
+redis>=5
+llama-index-storage-chat-store-redis>=0.1
+
+
+# Vector database
+qdrant-client==1.15.1
+
+# Document processing
+python-docx==1.2.0
+beautifulsoup4==4.13.5
+
+# HTTP and async
+requests==2.32.5
+httpx==0.28.1
+nest-asyncio==1.6.0
+
+# Configuration
+python-dotenv==1.1.1
+
+# JSON processing
+jsonpath-ng==1.7.0
+jsonschema==4.25.1
+
+# Circuit breaker and retry
+pybreaker==1.4.1
+tenacity==9.1.2
+
+# Text processing
+langdetect==1.0.9
+dateparser==1.2.2
+parsedatetime==2.6
+summa==1.2.0
+
+# ML/AI dependencies
+torch==2.8.0
+transformers==4.56.2
+sentence-transformers==5.1.1
+numpy<2.0  # Compatible con Python 3.10+
+
+# Other utilities
+packaging==25.0 
+
+
+#Agent Agno
+agno==2.0.9
+redis==5.0.1
+sse-starlette==1.6.5
+PyYAML==6.0.1
+
+
+sentence-transformers
+onnxruntime
+optimum
+
+qdrant-client[fastembed]
+
+python-tds==1.17.1
+pyodbc==5.3.0

@@ -1,0 +1,97 @@
+version: '3.8'
+
+# Docker Compose para desarrollo local
+# Este incluye Qdrant local y puede usar Ollama local o externo
+
+services:
+  # Aplicación FastAPI
+  asistente-medico-api-dev:
+    build: .
+    container_name: asistente-medico-api-dev
+    ports:
+      - "8000:8000"
+    environment:
+      # LLM Configuration
+      - LLM_MODEL_QA=thewindmom/llama3-med42-8b
+      - LLM_MODEL_SUMMARY=thewindmom/llama3-med42-8b
+      # Ollama externo con proxy reverso (puerto 80)
+      - LLM_BASE_URL=http://10.10.0.48
+      # Opción alternativa: Usar Ollama local en Docker (descomenta la siguiente línea)
+      # - LLM_BASE_URL=http://ollama-dev:11434
+      - LLM_TEMPERATURE=0
+      
+      # Embeddings
+      - EMBEDDING_MODEL=sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+      - EMBEDDING_DIM=384
+      
+      # Vector Database (usando Qdrant externo)
+      - QDRANT_URL=http://10.10.0.48:6333
+      
+      # Application limits
+      - ITEM_TOKENS_MAX=2000
+      - ITEM_MAX_CONCURRENT=3
+      
+      # Network configuration
+      - HOST=0.0.0.0
+      
+      # Database configuration (usando servidor externo o local)
+      - DB_HOST=10.10.0.48
+      - DB_PORT=1433
+      - DB_NAME=AsistenteMedico
+      - DB_USER=SA
+      - DB_PASSWORD=AsistenteMedico2024!
+    volumes:
+      - ./model_cache:/app/model_cache
+      - ./datasets:/app/datasets
+      # Mount source code for development (optional)
+      - .:/app
+    depends_on: []
+      # - qdrant-dev  # Comentado porque Qdrant es externo
+      # - ollama-dev  # Descomenta si usas Ollama local
+    networks:
+      - asistente-medico-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Qdrant local para desarrollo (comentado porque se usa externo)
+  # qdrant-dev:
+  #   image: qdrant/qdrant:latest
+  #   container_name: qdrant-dev
+  #   ports:
+  #     - "6333:6333"
+  #     - "6334:6334"
+  #   volumes:
+  #     - qdrant_dev_storage:/qdrant/storage
+  #   environment:
+  #     - QDRANT__SERVICE__HTTP_PORT=6333
+  #     - QDRANT__SERVICE__GRPC_PORT=6334
+  #   networks:
+  #     - asistente-medico-dev-network
+  #   restart: unless-stopped
+
+  # Ollama local para desarrollo (opcional, descomenta si quieres usarlo)
+  # ollama-dev:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama-dev
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_dev_data:/root/.ollama
+  #   environment:
+  #     - OLLAMA_HOST=0.0.0.0
+  #   networks:
+  #     - asistente-medico-dev-network
+  #   restart: unless-stopped
+
+volumes:
+  # qdrant_dev_storage:  # Comentado porque Qdrant es externo
+  # ollama_dev_data:  # Descomenta si usas Ollama local
+
+networks:
+  asistente-medico-dev-network:
+    driver: bridge

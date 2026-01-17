@@ -1,0 +1,224 @@
+[
+    {
+        "paciente_id": "163234",
+        "categoria": "Infecciosa / Microbiología",
+        "pregunta": "¿Qué gérmenes se aislaron en los cultivos de la colección abdominal en enero 2024?",
+        "respuesta_esperada": "En enero de 2024, en los cultivos de colección abdominal, se aislaron: Escherichia coli (E. coli) y Streptococcus grupo anginosus (S. anginosus).",
+        "sources": [
+            "Evolución 25/01/2024",
+            "Resultados de Cultivo"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Resumen Clínico / Evolución",
+        "pregunta": "Hacé un resumen de la evolución de la herida quirúrgica y el tratamiento antibiótico durante enero 2024.",
+        "respuesta_esperada": "La paciente presentó una infección grave del sitio quirúrgico en enero 2024 con bacterias multiresistentes. Tratamiento inicial: piperacilina-tazobactam, ajustado a ampicilina/sulbactam por resistencia de K. pneumoniae. La herida requirió sistema VAC, hubo fiebre persistente y manejo de anemia. Se realizaron drenajes y estudios de imagen.",
+        "sources": [
+            "Evolución Enero 2024"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Estado Clínico / Histórico",
+        "pregunta": "¿Cómo estaba la paciente antes del 19/11/2023?",
+        "respuesta_esperada": "Hemodinámicamente: Normotensa, FC estable. Respiratorio: Sin VNI ni oxígeno previo al 18/11. Abdomen: Pared blanda, herida limpia hasta entonces. Medicación habitual: Metformina, Vildagliptina, Losartán, etc. Lab intraquirúrgico 17/11: pH 7.37, Hb 9.2. Neuro: Vigil, Glasgow 15/15.",
+        "sources": [
+            "Evolución 16/11/2023",
+            "Evolución 17/11/2023",
+            "Evolución 18/11/2023"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Resumen Temporal",
+        "pregunta": "Resume la evolución entre el 16/11/2023 y el 18/11/2023",
+        "respuesta_esperada": "16/11: Día +2 internación por adenocarcinoma colon derecho. 18/11: Hemodinámicamente estable, afebril, diuresis conservada. Acidosis respiratoria requirió VNI desde 18:00 hs. Drenaje quirúrgico flanco derecho 75cc sangre.",
+        "sources": [
+            "Evolución 16-18 Nov 2023"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Datos Administrativos / Fechas",
+        "pregunta": "Cuándo ingresó a la UTI",
+        "respuesta_esperada": "29/12/2023 (según registros principales de reingreso o contexto de complicación grave mencionada en la prueba, confirmar con documento).",
+        "sources": [
+            "Ingreso UTI"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Antecedentes / Negación",
+        "pregunta": "¿El paciente tiene antecedentes de hipertensión arterial o asma?",
+        "respuesta_esperada": "No hay registros disponibles en la historia clínica sobre antecedentes de hipertensión arterial o asma. (Nota: Si toma Losartán/Amlodipina como se menciona en 'Medicamentos habituales', el agente debería inferir HTA tratada o reportar la medicación, pero la respuesta 'ground truth' del usuario dice 'No hay registros', se mantiene la instrucción del usuario para la prueba de 'lo que no está explícito como antecedente').",
+        "sources": []
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Farmacología",
+        "pregunta": "¿Qué esquema antibiótico está recibiendo el paciente en enero 2024 y cuáles fueron las dosis mencionadas?",
+        "respuesta_esperada": "Ceftriaxona: 1g IV cada 24hs. Metronidazol: 500mg IV cada 8hs. Iniciado el 25/01/2024 tras cultivo. Continuado hasta 30/01/2024.",
+        "sources": [
+            "Indicaciones Enero 2024"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Precisión de Datos (Laboratorio)",
+        "pregunta": "¿Cuáles fueron los valores exactos del laboratorio intraquirúrgico reportados durante la cirugía del 17/11/2023?",
+        "respuesta_esperada": "pH: 7.37, Hemoglobina: 9.2 g/dL, Hematocrito: 28%.",
+        "sources": [
+            "Nota quirúrgica 17/11/2023"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Razonamiento Temporal",
+        "pregunta": "¿Qué antibióticos se suspendieron el día 01/02/2024 y cuántos días de tratamiento con AMS llevaba el paciente en esa fecha?",
+        "respuesta_esperada": "Se suspendió piperacilina-tazobactam (PTZ). Continuó con Ampicilina-Sulbactam (AMS), cursando el día +13 de tratamiento.",
+        "sources": [
+            "Evolución 01/02/2024"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Cobertura Antecedentes",
+        "pregunta": "Enumera todos los antecedentes quirúrgicos del paciente realizados antes del año 2010.",
+        "respuesta_esperada": "Colecistectomía (2001), Salpingooforectomía (2002).",
+        "sources": [
+            "Antecedentes"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Síntesis Especialidad (Nutrición)",
+        "pregunta": "¿Cuál es el objetivo de peso específico que determinó el servicio de Cirugía para poder realizar la reconstrucción del tránsito?",
+        "respuesta_esperada": "Bajar 20 kilos.",
+        "sources": [
+            "Evoluciones Nutrición 2025"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Lógica Negativa (Hallucination Check)",
+        "pregunta": "¿Existe algún registro de 'alergia a la penicilina' en la sección de antecedentes o evoluciones?",
+        "respuesta_esperada": "No, no existe registro de alergia a la penicilina en la documentación disponible.",
+        "sources": []
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Contexto Complejo (Infecciones)",
+        "pregunta": "Detalle los microorganismos aislados en los cultivos de la colección abdominal y herida quirúrgica en Enero de 2024.",
+        "respuesta_esperada": "Escherichia coli, Streptococcus anginosus (colección abdominal). Klebsiella pneumoniae (mencionada en contexto de resistencia/cambio ATB).",
+        "sources": [
+            "Cultivos Enero 2024"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Relación Causa-Efecto",
+        "pregunta": "¿Cuál fue la complicación que motivó el reingreso a UTI a finales de noviembre 2023 o el cambio de conducta quirúrgica?",
+        "respuesta_esperada": "Dehiscencia de anastomosis o peritonitis secundaria.",
+        "sources": [
+            "Evolución finales Nov 2023"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Detalle Procedimiento",
+        "pregunta": "Describa la técnica quirúrgica utilizada en la reintervención del 25/11/2023.",
+        "respuesta_esperada": "Desmantelamiento de ileotransversoanastomosis y confección de ileostomía.",
+        "sources": [
+            "Parte Quirúrgico 25/11/2023"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Estado Actual (2025)",
+        "pregunta": "¿Qué indicación farmacológica se mencionó para el descenso de peso en la evolución más reciente de noviembre 2025?",
+        "respuesta_esperada": "NALTREVA (naltrexona y bupropión).",
+        "sources": [
+            "Evolución Noviembre 2025"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Interpretación Siglas",
+        "pregunta": "Explique qué significan las siglas 'TAMRD' y 'VAC' en el contexto del postoperatorio de este paciente.",
+        "respuesta_esperada": "TAMRD: Tensión Arterial Media / (o verificar contexto específico del documento si refiere a otra métrica). VAC: Vacuum Assisted Closure (Sistema de cierre asistido por vacío) para la herida.",
+        "sources": [
+            "General knowledge + Context"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Seguridad / ATB (A)",
+        "pregunta": "¿Qué antibióticos recibió la paciente al inicio de la complicación infecciosa (peritonitis) y en qué contexto?",
+        "respuesta_esperada": "Meropenem (tratamiento empírico) en contexto de peritonitis secundaria/terciaria, UTI día +2/+3.",
+        "sources": [
+            "Indicaciones UTI"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Seguridad / ATB (A)",
+        "pregunta": "¿Recibía antibióticos al momento del ingreso inmediato a terapia intensiva (antes de la complicación)?",
+        "respuesta_esperada": "No. Estaba afebril y sin tratamiento antibiótico inicial.",
+        "sources": [
+            "Ingreso UTI"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Temporalidad Explícita (B)",
+        "pregunta": "¿Qué pasó exactamente el 18/11/2023?",
+        "respuesta_esperada": "Evolución en UTI: Hemodinámicamente estable, sin antibióticos, afebril (o febril aislado), acidosis respiratoria, VNI tarde, drenaje.",
+        "sources": [
+            "Evolución 18/11/2023"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Evolución Clínica (C)",
+        "pregunta": "Describí la evolución hemodinámica general durante la internación crítica.",
+        "respuesta_esperada": "Generalmente estable. Sin requerimiento de vasoactivos inicialmente. (Evitar inferir shock séptico si no está documentado).",
+        "sources": [
+            "Evolución UTI"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Evolución Clínica (C)",
+        "pregunta": "¿Hubo registros febriles y cómo se manejaron inicialmente?",
+        "respuesta_esperada": "Picos febriles aislados que cedieron con paracetamol. No se inició antibiótico de forma inmediata ante el primer registro.",
+        "sources": [
+            "Enfermería / Evolución"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Contexto Quirúrgico (D)",
+        "pregunta": "¿Cuál fue el motivo de internación original y qué cirugía se realizó?",
+        "respuesta_esperada": "Motivo: Postoperatorio de hemicolectomía derecha por adenocarcinoma de colon derecho.",
+        "sources": [
+            "Ingreso / Carátula"
+        ]
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Pregunta Trampa / Seguridad (E)",
+        "pregunta": "¿Qué antibióticos recibió en 2025?",
+        "respuesta_esperada": "No hay registros de tratamiento antibiótico en la historia clínica para el año 2025 (o verificar si Naltreva es lo único mencionado). El agente debe indicar falta de datos si no existen.",
+        "sources": []
+    },
+    {
+        "paciente_id": "163234",
+        "categoria": "Resumen (F)",
+        "pregunta": "Resumen de la internación en terapia intensiva.",
+        "respuesta_esperada": "Postoperatorio que evoluciona con estabilidad inicial, luego episodio infeccioso (peritonitis/colección), inicio de tratamiento antibiótico (Meropenem, etc.), requerimiento de soporte respiratorio (VNI) transitorio.",
+        "sources": [
+            "Resumen UTI"
+        ]
+    }
+]

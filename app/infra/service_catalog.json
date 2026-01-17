@@ -1,0 +1,432 @@
+[
+  {
+    "id": 936,
+    "name": "ADMISION DE PACIENTES",
+    "norm": "ADMISION DE PACIENTES"
+  },
+  {
+    "id": 973,
+    "name": "CENTRO DE DOLOR BENIGNO",
+    "norm": "CENTRO DE DOLOR BENIGNO"
+  },
+  {
+    "id": 889,
+    "name": "CENTRO DEL DOLOR CUIDADOS PALIATIVOS",
+    "norm": "CENTRO DEL DOLOR CUIDADOS PALIATIVOS"
+  },
+  {
+    "id": 17,
+    "name": "DEPARTAMENTO BIOQUIMICA CLINICA",
+    "norm": "DEPARTAMENTO BIOQUIMICA CLINICA"
+  },
+  {
+    "id": 18,
+    "name": "DEPARTAMENTO DE ALIMENTACION Y DIETETICA",
+    "norm": "DEPARTAMENTO DE ALIMENTACION Y DIETETICA"
+  },
+  {
+    "id": 19,
+    "name": "DEPARTAMENTO DE CIRUGIA",
+    "norm": "DEPARTAMENTO DE CIRUGIA"
+  },
+  {
+    "id": 22,
+    "name": "DEPARTAMENTO DE HEMOTERAPIA",
+    "norm": "DEPARTAMENTO DE HEMOTERAPIA"
+  },
+  {
+    "id": 23,
+    "name": "DEPARTAMENTO DE MEDICINA",
+    "norm": "DEPARTAMENTO DE MEDICINA"
+  },
+  {
+    "id": 24,
+    "name": "DEPARTAMENTO DE MEDICINA (1º CATEDRA)",
+    "norm": "DEPARTAMENTO DE MEDICINA 1O CATEDRA"
+  },
+  {
+    "id": 25,
+    "name": "DEPARTAMENTO DE MEDICINA (4º CATEDRA)",
+    "norm": "DEPARTAMENTO DE MEDICINA 4O CATEDRA"
+  },
+  {
+    "id": 26,
+    "name": "DEPARTAMENTO DE MEDICINA (5º CATEDRA)",
+    "norm": "DEPARTAMENTO DE MEDICINA 5O CATEDRA"
+  },
+  {
+    "id": 27,
+    "name": "DEPARTAMENTO DE MEDICINA (6º CATEDRA)",
+    "norm": "DEPARTAMENTO DE MEDICINA 6O CATEDRA"
+  },
+  {
+    "id": 979,
+    "name": "DEPARTAMENTO DE MEDICINA (7º CATEDRA)",
+    "norm": "DEPARTAMENTO DE MEDICINA 7O CATEDRA"
+  },
+  {
+    "id": 954,
+    "name": "DEPARTAMENTO DE MEDICINA AMBULATORIA",
+    "norm": "DEPARTAMENTO DE MEDICINA AMBULATORIA"
+  },
+  {
+    "id": 28,
+    "name": "DEPARTAMENTO DE MEDICINA CRITICA",
+    "norm": "DEPARTAMENTO DE MEDICINA CRITICA"
+  },
+  {
+    "id": 29,
+    "name": "DEPARTAMENTO DE PATOLOGIA",
+    "norm": "DEPARTAMENTO DE PATOLOGIA"
+  },
+  {
+    "id": 32,
+    "name": "DEPARTAMENTO DE SALUD MENTAL",
+    "norm": "DEPARTAMENTO DE SALUD MENTAL"
+  },
+  {
+    "id": 33,
+    "name": "DEPARTAMENTO DE TOCOGINECOLOGIA",
+    "norm": "DEPARTAMENTO DE TOCOGINECOLOGIA"
+  },
+  {
+    "id": 983,
+    "name": "DEPARTAMENTO DE UROLOGIA (CATEDRA)",
+    "norm": "DEPARTAMENTO DE UROLOGIA CATEDRA"
+  },
+  {
+    "id": 34,
+    "name": "DEPARTAMENTO DIAGNOSTICO POR IMAGENES",
+    "norm": "DEPARTAMENTO DIAGNOSTICO POR IMAGENES"
+  },
+  {
+    "id": 906,
+    "name": "DEPARTAMENTO INFORMATICA",
+    "norm": "DEPARTAMENTO INFORMATICA"
+  },
+  {
+    "id": 35,
+    "name": "DEPARTAMENTO SERVICIO SOCIAL",
+    "norm": "DEPARTAMENTO SERVICIO SOCIAL"
+  },
+  {
+    "id": 49,
+    "name": "DIRECCION ESTADISTICAS Y ARCHIVO MEDICO",
+    "norm": "DIRECCION ESTADISTICAS Y ARCHIVO MEDICO"
+  },
+  {
+    "id": 50,
+    "name": "DIVISION ALERGIA E INMUNOLOGIA",
+    "norm": "DIVISION ALERGIA E INMUNOLOGIA"
+  },
+  {
+    "id": 51,
+    "name": "DIVISION ANESTESIOLOGIA",
+    "norm": "DIVISION ANESTESIOLOGIA"
+  },
+  {
+    "id": 53,
+    "name": "DIVISION AT.PRIMARIA Y AT.AMB.S MEN",
+    "norm": "DIVISION AT PRIMARIA Y AT AMB S MEN"
+  },
+  {
+    "id": 56,
+    "name": "DIVISION CARDIOLOGIA",
+    "norm": "DIVISION CARDIOLOGIA"
+  },
+  {
+    "id": 57,
+    "name": "DIVISION CIRUGIA CARDIACA",
+    "norm": "DIVISION CIRUGIA CARDIACA"
+  },
+  {
+    "id": 58,
+    "name": "DIVISION CIRUGIA EXPERIMENTAL",
+    "norm": "DIVISION CIRUGIA EXPERIMENTAL"
+  },
+  {
+    "id": 59,
+    "name": "DIVISION CIRUGIA GASTROENTEROLOGICA",
+    "norm": "DIVISION CIRUGIA GASTROENTEROLOGICA"
+  },
+  {
+    "id": 933,
+    "name": "DIVISION CIRUGÍA GRAL. LAPAROSCÓPICA Y MINI-INVASIVA",
+    "norm": "DIVISION CIRUGIA GRAL LAPAROSCOPICA Y MINI-INVASIVA"
+  },
+  {
+    "id": 60,
+    "name": "DIVISION CIRUGIA ONCOLOGICA",
+    "norm": "DIVISION CIRUGIA ONCOLOGICA"
+  },
+  {
+    "id": 61,
+    "name": "DIVISION CIRUGIA PLASTICA",
+    "norm": "DIVISION CIRUGIA PLASTICA"
+  },
+  {
+    "id": 62,
+    "name": "DIVISION CIRUGIA TORACICA",
+    "norm": "DIVISION CIRUGIA TORACICA"
+  },
+  {
+    "id": 63,
+    "name": "DIVISION CIRUGIA VASCULAR",
+    "norm": "DIVISION CIRUGIA VASCULAR"
+  },
+  {
+    "id": 985,
+    "name": "DIVISION CIRUGIA VENOSA Y LINFATICA",
+    "norm": "DIVISION CIRUGIA VENOSA Y LINFATICA"
+  },
+  {
+    "id": 70,
+    "name": "DIVISION CONSULTORIOS EXTERNOS - GINECOLOGIA",
+    "norm": "DIVISION CONSULTORIOS EXTERNOS - GINECOLOGIA"
+  },
+  {
+    "id": 31,
+    "name": "DIVISION CONSULTORIOS EXTERNOS - PEDIATRIA",
+    "norm": "DIVISION CONSULTORIOS EXTERNOS - PEDIATRIA"
+  },
+  {
+    "id": 64,
+    "name": "DIVISION CONSULTORIOS EXTERNOS - SECTOR A",
+    "norm": "DIVISION CONSULTORIOS EXTERNOS - SECTOR A"
+  },
+  {
+    "id": 927,
+    "name": "DIVISION CONSULTORIOS EXTERNOS - SECTOR B",
+    "norm": "DIVISION CONSULTORIOS EXTERNOS - SECTOR B"
+  },
+  {
+    "id": 929,
+    "name": "DIVISION CONSULTORIOS EXTERNOS - TRAUMATOLOGIA",
+    "norm": "DIVISION CONSULTORIOS EXTERNOS - TRAUMATOLOGIA"
+  },
+  {
+    "id": 937,
+    "name": "DIVISION CONSULTORIOS EXTERNOS DE CIRUGIA",
+    "norm": "DIVISION CONSULTORIOS EXTERNOS DE CIRUGIA"
+  },
+  {
+    "id": 928,
+    "name": "DIVISION DE MEDICINA INTERNA GENERAL",
+    "norm": "DIVISION DE MEDICINA INTERNA GENERAL"
+  },
+  {
+    "id": 65,
+    "name": "DIVISION DERMATOLOGIA",
+    "norm": "DIVISION DERMATOLOGIA"
+  },
+  {
+    "id": 67,
+    "name": "DIVISION ENDOCRINOLOGIA",
+    "norm": "DIVISION ENDOCRINOLOGIA"
+  },
+  {
+    "id": 68,
+    "name": "DIVISION GASTROENTEROLOGIA",
+    "norm": "DIVISION GASTROENTEROLOGIA"
+  },
+  {
+    "id": 953,
+    "name": "DIVISION GINECOLOGÍA",
+    "norm": "DIVISION GINECOLOGIA"
+  },
+  {
+    "id": 71,
+    "name": "DIVISION HEMATOLOGIA",
+    "norm": "DIVISION HEMATOLOGIA"
+  },
+  {
+    "id": 72,
+    "name": "DIVISION INFECTOLOGIA",
+    "norm": "DIVISION INFECTOLOGIA"
+  },
+  {
+    "id": 883,
+    "name": "DIVISION MEDICINA NUCLEAR",
+    "norm": "DIVISION MEDICINA NUCLEAR"
+  },
+  {
+    "id": 74,
+    "name": "DIVISION NEFROLOGIA",
+    "norm": "DIVISION NEFROLOGIA"
+  },
+  {
+    "id": 75,
+    "name": "DIVISION NEONATOLOGIA",
+    "norm": "DIVISION NEONATOLOGIA"
+  },
+  {
+    "id": 76,
+    "name": "DIVISION NEUMONOLOGIA",
+    "norm": "DIVISION NEUMONOLOGIA"
+  },
+  {
+    "id": 77,
+    "name": "DIVISION NEUROCIRUGIA",
+    "norm": "DIVISION NEUROCIRUGIA"
+  },
+  {
+    "id": 78,
+    "name": "DIVISION NEUROLOGIA",
+    "norm": "DIVISION NEUROLOGIA"
+  },
+  {
+    "id": 79,
+    "name": "DIVISION NUTRICION",
+    "norm": "DIVISION NUTRICION"
+  },
+  {
+    "id": 80,
+    "name": "DIVISION O.R.L.",
+    "norm": "DIVISION O R L"
+  },
+  {
+    "id": 81,
+    "name": "DIVISION OBSTETRICIA",
+    "norm": "DIVISION OBSTETRICIA"
+  },
+  {
+    "id": 82,
+    "name": "DIVISION OFTALMOLOGIA",
+    "norm": "DIVISION OFTALMOLOGIA"
+  },
+  {
+    "id": 83,
+    "name": "DIVISION ONCOLOGIA",
+    "norm": "DIVISION ONCOLOGIA"
+  },
+  {
+    "id": 84,
+    "name": "DIVISION ORTOPEDIA Y TRAUMATOLOGIA",
+    "norm": "DIVISION ORTOPEDIA Y TRAUMATOLOGIA"
+  },
+  {
+    "id": 964,
+    "name": "DIVISION OSTEOPATIAS",
+    "norm": "DIVISION OSTEOPATIAS"
+  },
+  {
+    "id": 85,
+    "name": "DIVISION PEDIATRIA",
+    "norm": "DIVISION PEDIATRIA"
+  },
+  {
+    "id": 899,
+    "name": "DIVISION QUIROFANO DE ENDOUROLOGIA",
+    "norm": "DIVISION QUIROFANO DE ENDOUROLOGIA"
+  },
+  {
+    "id": 87,
+    "name": "DIVISION QUIROFANOS",
+    "norm": "DIVISION QUIROFANOS"
+  },
+  {
+    "id": 975,
+    "name": "DIVISION RADIOLOGIA INTERVENCIONISTA",
+    "norm": "DIVISION RADIOLOGIA INTERVENCIONISTA"
+  },
+  {
+    "id": 88,
+    "name": "DIVISION REUMATOLOGIA",
+    "norm": "DIVISION REUMATOLOGIA"
+  },
+  {
+    "id": 89,
+    "name": "DIVISION TERAPIA INTENSIVA",
+    "norm": "DIVISION TERAPIA INTENSIVA"
+  },
+  {
+    "id": 90,
+    "name": "DIVISION TOXICOLOGIA",
+    "norm": "DIVISION TOXICOLOGIA"
+  },
+  {
+    "id": 91,
+    "name": "DIVISION UNIDAD CORONARIA",
+    "norm": "DIVISION UNIDAD CORONARIA"
+  },
+  {
+    "id": 92,
+    "name": "DIVISION URGENCIAS",
+    "norm": "DIVISION URGENCIAS"
+  },
+  {
+    "id": 93,
+    "name": "DIVISION UROLOGIA",
+    "norm": "DIVISION UROLOGIA"
+  },
+  {
+    "id": 94,
+    "name": "ESCUELA DE ENFERMERIA",
+    "norm": "ESCUELA DE ENFERMERIA"
+  },
+  {
+    "id": 986,
+    "name": "FACULTAD DE ODONTOLOGIA",
+    "norm": "FACULTAD DE ODONTOLOGIA"
+  },
+  {
+    "id": 967,
+    "name": "HOSPITAL DE DIA PEDIATRIA / INTERNACION ONCOLOGIA",
+    "norm": "HOSPITAL DE DIA PEDIATRIA / INTERNACION ONCOLOGIA"
+  },
+  {
+    "id": 934,
+    "name": "INMUNOSUPRIMIDOS Y TRANSPLANTE RENAL",
+    "norm": "INMUNOSUPRIMIDOS Y TRANSPLANTE RENAL"
+  },
+  {
+    "id": 901,
+    "name": "LABORATORIO DE HEMODINAMIA",
+    "norm": "LABORATORIO DE HEMODINAMIA"
+  },
+  {
+    "id": 99,
+    "name": "LABORATORIO DE TERAPIA INTENSIVA",
+    "norm": "LABORATORIO DE TERAPIA INTENSIVA"
+  },
+  {
+    "id": 931,
+    "name": "NEONATOLOGIA PATOLOGICA",
+    "norm": "NEONATOLOGIA PATOLOGICA"
+  },
+  {
+    "id": 111,
+    "name": "PROGRAMA HOSPITAL DE DIA",
+    "norm": "PROGRAMA HOSPITAL DE DIA"
+  },
+  {
+    "id": 984,
+    "name": "REFLEXOLOGIA",
+    "norm": "REFLEXOLOGIA"
+  },
+  {
+    "id": 976,
+    "name": "TERAPIA INTENSIVA (GCBA)",
+    "norm": "TERAPIA INTENSIVA GCBA"
+  },
+  {
+    "id": 120,
+    "name": "TRANSPLANTE MEDULA OSEA",
+    "norm": "TRANSPLANTE MEDULA OSEA"
+  },
+  {
+    "id": 882,
+    "name": "UCIP - UNIDAD CUIDADOS INTENSIVOS PEDIATRICOS",
+    "norm": "UCIP - UNIDAD CUIDADOS INTENSIVOS PEDIATRICOS"
+  },
+  {
+    "id": 930,
+    "name": "UCIP - UNIDAD CUIDADOS INTENSIVOS PEDIATRICOS INTERMEDIO",
+    "norm": "UCIP - UNIDAD CUIDADOS INTENSIVOS PEDIATRICOS INTERMEDIO"
+  },
+  {
+    "id": 96,
+    "name": "UROLOGIA APLICADA INST",
+    "norm": "UROLOGIA APLICADA INST"
+  }
+]

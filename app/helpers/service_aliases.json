@@ -1,0 +1,1223 @@
+{
+  "29": {
+    "name": "Departamento De Patoologia",
+    "alias_exact": [
+      "Departamento De Patoologia",
+      "Patoologia",
+      "patoologia"
+    ]
+  },
+  "882": {
+    "name": "Ucip - Unidad Cuidados Intensivos Pediatricos",
+    "alias_exact": [
+      "-  Cuidados Intensivos Pediatricos",
+      "-  cuidados intensivos pediatricos",
+      "Ucip - Unidad Cuidados Intensivos Pediatricos"
+    ],
+    "alias_common": [
+      "ucip"
+    ],
+    "require_any": [
+      "ucip"
+    ],
+    "parent": "28"
+  },
+  "75": {
+    "name": "Division Neonatologia",
+    "alias_exact": [
+      "Division Neonatologia",
+      "Neonatologia",
+      "neonatologia"
+    ],
+    "alias_common": [
+      "neonato",
+      "rn"
+    ],
+    "require_any": [
+      "neonato",
+      "rn"
+    ]
+  },
+  "71": {
+    "name": "Division Hematologia",
+    "alias_exact": [
+      "Division Hematologia",
+      "Hematologia",
+      "hematologia"
+    ],
+    "alias_common": [
+      "hemato"
+    ],
+    "require_any": [
+      "hemato"
+    ],
+    "parent": "23"
+  },
+  "967": {
+    "name": "Hospital De Dia Pediatria / Internacion Oncologia",
+    "alias_exact": [
+      "Hospital  Dia Pediatria / Internacion Oncologia",
+      "Hospital De Dia Pediatria / Internacion Oncologia",
+      "hospital  dia pediatria / internacion oncologia"
+    ],
+    "alias_common": [
+      "onco"
+    ],
+    "require_any": [
+      "onco"
+    ]
+  },
+  "975": {
+    "name": "Division Radiologia Intervencionista",
+    "alias_exact": [
+      "Division Radiologia Intervencionista",
+      "Radiologia Intervencionista",
+      "radiologia intervencionista"
+    ],
+    "alias_common": [
+      "intervencionista"
+    ],
+    "require_any": [
+      "intervenc",
+      "radiol"
+    ],
+    "parent": "34"
+  },
+  "929": {
+    "name": "Division Consultorios Externos - Traumatologia",
+    "alias_exact": [
+      "Consultorios Externos - Traumatologia",
+      "Division Consultorios Externos - Traumatologia",
+      "consultorios externos - traumatologia"
+    ],
+    "alias_common": [
+      "traumato"
+    ],
+    "require_any": [
+      "traumato"
+    ]
+  },
+  "24": {
+    "name": "Departamento De Medicina (1 Catedra)",
+    "alias_exact": [
+      "Departamento De Medicina (1 Catedra)",
+      "Medicina (1 Catedra)",
+      "medicina (1 catedra)"
+    ]
+  },
+  "99": {
+    "name": "Laboratorio De Terapia Intensiva",
+    "alias_exact": [
+      "Laboratorio  Terapia Intensiva",
+      "Laboratorio De Terapia Intensiva",
+      "laboratorio  terapia intensiva"
+    ],
+    "alias_common": [
+      "uci",
+      "uti",
+      "cti"
+    ],
+    "require_any": [
+      "cti",
+      "intensiva",
+      "uci",
+      "uti"
+    ],
+    "parent": "28"
+  },
+  "973": {
+    "name": "Centro De Dolor Benigno",
+    "alias_exact": [
+      "Centro De Dolor Benigno",
+      "Dolor Benigno",
+      "dolor benigno"
+    ],
+    "alias_common": [
+      "paliativos"
+    ],
+    "require_any": [
+      "paliat"
+    ]
+  },
+  "72": {
+    "name": "Division Infectologia",
+    "alias_exact": [
+      "Division Infectologia",
+      "Infectologia",
+      "infectologia"
+    ],
+    "alias_common": [
+      "infecto"
+    ],
+    "require_any": [
+      "infecto"
+    ],
+    "parent": "23"
+  },
+  "984": {
+    "name": "Reflexologia",
+    "alias_exact": [
+      "Reflexologia",
+      "reflexologia"
+    ]
+  },
+  "51": {
+    "name": "Division Anestesiologia",
+    "alias_exact": [
+      "Anestesiologia",
+      "Division Anestesiologia",
+      "anestesiologia"
+    ],
+    "alias_common": [
+      "anestesia"
+    ],
+    "require_any": [
+      "anest"
+    ]
+  },
+  "93": {
+    "name": "Division Urologia",
+    "alias_exact": [
+      "Division Urologia",
+      "Urologia",
+      "urologia"
+    ],
+    "alias_common": [
+      "uro"
+    ],
+    "require_any": [
+      "uro"
+    ],
+    "parent": "23"
+  },
+  "50": {
+    "name": "Division Alergia E Inmunologia",
+    "alias_exact": [
+      "Alergia E Inmunologia",
+      "Division Alergia E Inmunologia",
+      "alergia e inmunologia"
+    ],
+    "alias_common": [
+      "alergia",
+      "inmuno"
+    ],
+    "require_any": [
+      "alerg",
+      "inmuno"
+    ]
+  },
+  "19": {
+    "name": "Departamento De Cirugia",
+    "alias_exact": [
+      "Cirugia",
+      "Departamento De Cirugia",
+      "cirugia"
+    ]
+  },
+  "59": {
+    "name": "Division Cirugia Gastroenterologica",
+    "alias_exact": [
+      "Cirugia Gastroenterologica",
+      "Division Cirugia Gastroenterologica",
+      "cirugia gastroenterologica"
+    ],
+    "parent": "19"
+  },
+  "82": {
+    "name": "Division Oftalmologia",
+    "alias_exact": [
+      "Division Oftalmologia",
+      "Oftalmologia",
+      "oftalmologia"
+    ],
+    "alias_common": [
+      "oftalmo",
+      "oftal",
+      "ojo",
+      "retina",
+      "glaucoma"
+    ],
+    "require_any": [
+      "oftal",
+      "retina",
+      "glaucoma",
+      "cornea",
+      "fo",
+      "oct"
+    ],
+    "deny": [
+      "vision del proyecto",
+      "vision general"
+    ]
+  },
+  "65": {
+    "name": "Division Dermatologia",
+    "alias_exact": [
+      "Dermatologia",
+      "Division Dermatologia",
+      "dermatologia"
+    ],
+    "alias_common": [
+      "derma"
+    ],
+    "require_any": [
+      "derma",
+      "dermato"
+    ]
+  },
+  "936": {
+    "name": "Admision De Pacientes",
+    "alias_exact": [
+      "Admision  Pacientes",
+      "Admision De Pacientes",
+      "admision  pacientes"
+    ],
+    "alias_common": [
+      "admision"
+    ],
+    "require_any": [
+      "admision",
+      "ingreso"
+    ]
+  },
+  "986": {
+    "name": "Facultad De Odontologia",
+    "alias_exact": [
+      "Facultad  Odontologia",
+      "Facultad De Odontologia",
+      "facultad  odontologia"
+    ]
+  },
+  "62": {
+    "name": "Division Cirugia Toracica",
+    "alias_exact": [
+      "Cirugia Toracica",
+      "Division Cirugia Toracica",
+      "cirugia toracica"
+    ],
+    "alias_common": [
+      "torac",
+      "pulmon"
+    ],
+    "require_any": [
+      "cirug",
+      "torac"
+    ],
+    "parent": "19"
+  },
+  "17": {
+    "name": "Departamento Bioquimica Clinica",
+    "alias_exact": [
+      "Bioquimica Clinica",
+      "Departamento Bioquimica Clinica",
+      "bioquimica clinica"
+    ],
+    "alias_common": [
+      "bioquim",
+      "serologia"
+    ],
+    "require_any": [
+      "bioquim",
+      "serolog"
+    ]
+  },
+  "76": {
+    "name": "Division Neumonologia",
+    "alias_exact": [
+      "Division Neumonologia",
+      "Neumonologia",
+      "neumonologia"
+    ],
+    "alias_common": [
+      "neumo"
+    ],
+    "require_any": [
+      "neumo"
+    ],
+    "parent": "23"
+  },
+  "901": {
+    "name": "Laboratorio De Hemodinamia",
+    "alias_exact": [
+      "Laboratorio  Hemodinamia",
+      "Laboratorio De Hemodinamia",
+      "laboratorio  hemodinamia"
+    ],
+    "alias_common": [
+      "hemodinamia"
+    ],
+    "require_any": [
+      "hemodin"
+    ]
+  },
+  "92": {
+    "name": "Division Urgencias",
+    "alias_exact": [
+      "Division Urgencias",
+      "Urgencias",
+      "urgencias"
+    ],
+    "alias_common": [
+      "emergencia",
+      "guardia",
+      "uti"
+    ],
+    "require_any": [
+      "emerg",
+      "guardia",
+      "urgenc"
+    ]
+  },
+  "96": {
+    "name": "Urologia Aplicada Inst",
+    "alias_exact": [
+      "Urologia Aplicada",
+      "Urologia Aplicada Inst",
+      "urologia aplicada"
+    ],
+    "alias_common": [
+      "uro",
+      "litiasis",
+      "prostata"
+    ],
+    "require_any": [
+      "uro",
+      "litias",
+      "prostat"
+    ],
+    "parent": "23"
+  },
+  "889": {
+    "name": "Centro Del Dolor Cuidados Paliativos",
+    "alias_exact": [
+      "Centro Del Dolor Cuidados Paliativos",
+      "Dolor Cuidados Paliativos",
+      "dolor cuidados paliativos"
+    ],
+    "alias_common": [
+      "paliativos",
+      "dolor"
+    ],
+    "require_any": [
+      "dolor",
+      "paliat"
+    ]
+  },
+  "53": {
+    "name": "Division At.Primaria Y At.Amb.S Men",
+    "alias_exact": [
+      "At.Primaria Y At.Amb.S Men",
+      "Division At.Primaria Y At.Amb.S Men",
+      "at.primaria y at.amb.s men"
+    ]
+  },
+  "928": {
+    "name": "Division De Medicina Interna General",
+    "alias_exact": [
+      "Division De Medicina Interna General",
+      "Medicina Interna General",
+      "medicina interna general"
+    ],
+    "alias_common": [
+      "clinica medica",
+      "clinica"
+    ],
+    "require_any": [
+      "clinica",
+      "medicina"
+    ]
+  },
+  "90": {
+    "name": "Division Toxicologia",
+    "alias_exact": [
+      "Division Toxicologia",
+      "Toxicologia",
+      "toxicologia"
+    ],
+    "alias_common": [
+      "toxico"
+    ],
+    "require_any": [
+      "toxico"
+    ]
+  },
+  "35": {
+    "name": "Departamento Servicio Social",
+    "alias_exact": [
+      "Departamento Servicio Social",
+      "Servicio Social",
+      "servicio social"
+    ],
+    "alias_common": [
+      "trabajo social",
+      "servicio social"
+    ],
+    "require_any": [
+      "social"
+    ]
+  },
+  "74": {
+    "name": "Division Nefrologia",
+    "alias_exact": [
+      "Division Nefrologia",
+      "Nefrologia",
+      "nefrologia"
+    ],
+    "alias_common": [
+      "nefro"
+    ],
+    "require_any": [
+      "nefro"
+    ],
+    "parent": "23"
+  },
+  "931": {
+    "name": "Neonatologia Patologica",
+    "alias_exact": [
+      "Neonatologia Patologica",
+      "neonatologia patologica"
+    ],
+    "alias_common": [
+      "neonato",
+      "rn"
+    ],
+    "require_any": [
+      "neonato",
+      "rn"
+    ]
+  },
+  "81": {
+    "name": "Division Obstetricia",
+    "alias_exact": [
+      "Division Obstetricia",
+      "Obstetricia",
+      "obstetricia"
+    ],
+    "alias_common": [
+      "obstet"
+    ],
+    "require_any": [
+      "obstet"
+    ],
+    "parent": "33"
+  },
+  "49": {
+    "name": "Direccion Estadisticas Y Archivo Medico",
+    "alias_exact": [
+      "Direccion Estadisticas Y Archivo Medico",
+      "direccion estadisticas y archivo medico"
+    ]
+  },
+  "933": {
+    "name": "Division Cirugia Gral. Laparoscopica Y Mini-Invasiva",
+    "alias_exact": [
+      "Cirugia Gral. Laparoscopica Y Mini-Invasiva",
+      "Division Cirugia Gral. Laparoscopica Y Mini-Invasiva",
+      "cirugia gral. laparoscopica y mini-invasiva"
+    ],
+    "alias_common": [
+      "laparoscopica"
+    ],
+    "require_any": [
+      "laparo"
+    ],
+    "parent": "19"
+  },
+  "964": {
+    "name": "Division Osteopatias",
+    "alias_exact": [
+      "Division Osteopatias",
+      "Osteopatias",
+      "osteopatias"
+    ],
+    "alias_common": [
+      "osteo"
+    ],
+    "require_any": [
+      "osteo"
+    ]
+  },
+  "63": {
+    "name": "Division Cirugia Vascular",
+    "alias_exact": [
+      "Cirugia Vascular",
+      "Division Cirugia Vascular",
+      "cirugia vascular"
+    ],
+    "alias_common": [
+      "vascular"
+    ],
+    "require_any": [
+      "vascular"
+    ],
+    "parent": "19"
+  },
+  "899": {
+    "name": "Division Quirofano De Endourologia",
+    "alias_exact": [
+      "Division Quirofano De Endourologia",
+      "Quirofano  Endourologia",
+      "quirofano  endourologia"
+    ],
+    "alias_common": [
+      "endouro"
+    ],
+    "require_any": [
+      "endouro",
+      "uro"
+    ],
+    "parent": "19"
+  },
+  "954": {
+    "name": "Departamento De Medicina Ambulatoria",
+    "alias_exact": [
+      "Departamento De Medicina Ambulatoria",
+      "Medicina Ambulatoria",
+      "medicina ambulatoria"
+    ]
+  },
+  "61": {
+    "name": "Division Cirugia Plastica",
+    "alias_exact": [
+      "Cirugia Plastica",
+      "Division Cirugia Plastica",
+      "cirugia plastica"
+    ],
+    "alias_common": [
+      "plastica"
+    ],
+    "require_any": [
+      "plast"
+    ],
+    "parent": "19"
+  },
+  "31": {
+    "name": "Division Consultorios Externos - Pediatria",
+    "alias_exact": [
+      "Consultorios Externos - Pediatria",
+      "Division Consultorios Externos - Pediatria",
+      "consultorios externos - pediatria"
+    ],
+    "alias_common": [
+      "pedia"
+    ],
+    "require_any": [
+      "nino",
+      "pedia"
+    ]
+  },
+  "26": {
+    "name": "Departamento De Medicina (5 Catedra)",
+    "alias_exact": [
+      "Departamento De Medicina (5 Catedra)",
+      "Medicina (5 Catedra)",
+      "medicina (5 catedra)"
+    ]
+  },
+  "976": {
+    "name": "Terapia Intensiva (Gcba)",
+    "alias_exact": [
+      "Terapia Intensiva (Gcba)",
+      "terapia intensiva (gcba)"
+    ],
+    "alias_common": [
+      "cti",
+      "uci",
+      "uti"
+    ],
+    "require_any": [
+      "cti",
+      "intensiva",
+      "uci",
+      "uti"
+    ],
+    "parent": "28"
+  },
+  "934": {
+    "name": "Inmunosuprimidos Y Transplante Renal",
+    "alias_exact": [
+      "Inmunosuprimidos Y Transplante Renal",
+      "inmunosuprimidos y transplante renal"
+    ]
+  },
+  "79": {
+    "name": "Division Nutricion",
+    "alias_exact": [
+      "Division Nutricion",
+      "Nutricion",
+      "nutricion"
+    ],
+    "alias_common": [
+      "nutri"
+    ],
+    "require_any": [
+      "nutric",
+      "nutri"
+    ],
+    "parent": "23"
+  },
+  "89": {
+    "name": "Division Terapia Intensiva",
+    "alias_exact": [
+      "Division Terapia Intensiva",
+      "Terapia Intensiva",
+      "terapia intensiva"
+    ],
+    "alias_common": [
+      "cti",
+      "uci",
+      "uti",
+      "intensiva",
+      "unidad de cuidados intensivos"
+    ],
+    "require_any": [
+      "cti",
+      "intensiva",
+      "uci",
+      "uti"
+    ],
+    "parent": "28"
+  },
+  "937": {
+    "name": "Division Consultorios Externos De Cirugia",
+    "alias_exact": [
+      "Consultorios Externos  Cirugia",
+      "Division Consultorios Externos De Cirugia",
+      "consultorios externos  cirugia"
+    ],
+    "alias_common": [
+      "consultorios externos"
+    ],
+    "require_any": [
+      "consultorio",
+      "externo"
+    ]
+  },
+  "979": {
+    "name": "Departamento De Medicina (7 Catedra)",
+    "alias_exact": [
+      "Departamento De Medicina (7 Catedra)",
+      "Medicina (7 Catedra)",
+      "medicina (7 catedra)"
+    ]
+  },
+  "88": {
+    "name": "Division Reumatologia",
+    "alias_exact": [
+      "Division Reumatologia",
+      "Reumatologia",
+      "reumatologia"
+    ],
+    "alias_common": [
+      "reumato",
+      "reuma"
+    ],
+    "require_any": [
+      "reumato",
+      "reuma",
+      "artrit"
+    ],
+    "parent": "23"
+  },
+  "85": {
+    "name": "Division Pediatria",
+    "alias_exact": [
+      "Division Pediatria",
+      "Pediatria",
+      "pediatria"
+    ],
+    "alias_common": [
+      "pedia"
+    ],
+    "require_any": [
+      "nino",
+      "pedia"
+    ]
+  },
+  "78": {
+    "name": "Division Neurologia",
+    "alias_exact": [
+      "Division Neurologia",
+      "Neurologia",
+      "neurologia"
+    ],
+    "alias_common": [
+      "neuro"
+    ],
+    "require_any": [
+      "neuro",
+      "epilep",
+      "acv"
+    ],
+    "parent": "23"
+  },
+  "64": {
+    "name": "Division Consultorios Externos - Sector A",
+    "alias_exact": [
+      "Consultorios Externos -  A",
+      "Division Consultorios Externos - Sector A",
+      "consultorios externos -  a"
+    ],
+    "alias_common": [
+      "consultorios externos"
+    ],
+    "require_any": [
+      "consultorio",
+      "externo"
+    ]
+  },
+  "18": {
+    "name": "Departamento De Alimentacion Y Dietetica",
+    "alias_exact": [
+      "Alimentacion Y Dietetica",
+      "Departamento De Alimentacion Y Dietetica",
+      "alimentacion y dietetica"
+    ]
+  },
+  "87": {
+    "name": "Division Quirofanos",
+    "alias_exact": [
+      "Division Quirofanos",
+      "Quirofanos",
+      "quirofanos"
+    ],
+    "alias_common": [
+      "quirofano"
+    ],
+    "require_any": [
+      "cirug",
+      "quirof"
+    ]
+  },
+  "927": {
+    "name": "Division Consultorios Externos - Sector B",
+    "alias_exact": [
+      "Consultorios Externos -  B",
+      "Division Consultorios Externos - Sector B",
+      "consultorios externos -  b"
+    ],
+    "alias_common": [
+      "consultorios externos"
+    ],
+    "require_any": [
+      "consultorio",
+      "externo"
+    ]
+  },
+  "985": {
+    "name": "Division Cirugia Venosa Y Linfatica",
+    "alias_exact": [
+      "Cirugia Venosa Y Linfatica",
+      "Division Cirugia Venosa Y Linfatica",
+      "cirugia venosa y linfatica"
+    ],
+    "alias_common": [
+      "linfat",
+      "venosa"
+    ],
+    "require_any": [
+      "linfat",
+      "venosa"
+    ],
+    "parent": "19"
+  },
+  "83": {
+    "name": "Division Oncologia",
+    "alias_exact": [
+      "Division Oncologia",
+      "Oncologia",
+      "oncologia"
+    ],
+    "alias_common": [
+      "onco"
+    ],
+    "require_any": [
+      "onco",
+      "tumor",
+      "quimio"
+    ]
+  },
+  "57": {
+    "name": "Division Cirugia Cardiaca",
+    "alias_exact": [
+      "Cirugia Cardiaca",
+      "Division Cirugia Cardiaca",
+      "cirugia cardiaca"
+    ],
+    "alias_common": [
+      "cirugia cardiaca"
+    ],
+    "require_any": [
+      "cardiac",
+      "cirug"
+    ],
+    "parent": "19"
+  },
+  "27": {
+    "name": "Departamento De Medicina (6 Catedra)",
+    "alias_exact": [
+      "Departamento De Medicina (6 Catedra)",
+      "Medicina (6 Catedra)",
+      "medicina (6 catedra)"
+    ]
+  },
+  "23": {
+    "name": "Departamento De Medicina",
+    "alias_exact": [
+      "Departamento De Medicina",
+      "Medicina",
+      "medicina"
+    ]
+  },
+  "84": {
+    "name": "Division Ortopedia Y Traumatologia",
+    "alias_exact": [
+      "Division Ortopedia Y Traumatologia",
+      "Ortopedia Y Traumatologia",
+      "ortopedia y traumatologia"
+    ],
+    "alias_common": [
+      "traumato",
+      "ortopedia"
+    ],
+    "require_any": [
+      "trauma",
+      "ortop"
+    ],
+    "parent": "19"
+  },
+  "111": {
+    "name": "Programa Hospital De Dia",
+    "alias_exact": [
+      "Hospital  Dia",
+      "Programa Hospital De Dia",
+      "hospital  dia"
+    ],
+    "alias_common": [
+      "hospital de dia"
+    ],
+    "require_any": [
+      "hospital de dia"
+    ]
+  },
+  "120": {
+    "name": "Transplante Medula Osea",
+    "alias_exact": [
+      "Transplante Medula Osea",
+      "transplante medula osea"
+    ],
+    "alias_common": [
+      "tmo",
+      "medula"
+    ],
+    "require_any": [
+      "medula",
+      "tmo"
+    ]
+  },
+  "68": {
+    "name": "Division Gastroenterologia",
+    "alias_exact": [
+      "Division Gastroenterologia",
+      "Gastroenterologia",
+      "gastroenterologia"
+    ],
+    "alias_common": [
+      "gastro",
+      "hepat"
+    ],
+    "require_any": [
+      "gastro",
+      "hepat",
+      "colon"
+    ],
+    "parent": "23"
+  },
+  "94": {
+    "name": "Escuela De Enfermeria",
+    "alias_exact": [
+      "Escuela  Enfermeria",
+      "Escuela De Enfermeria",
+      "escuela  enfermeria"
+    ]
+  },
+  "56": {
+    "name": "Division Cardiologia",
+    "alias_exact": [
+      "Cardiologia",
+      "Division Cardiologia",
+      "cardiologia"
+    ],
+    "alias_common": [
+      "cardio"
+    ],
+    "require_any": [
+      "cardio"
+    ],
+    "parent": "23"
+  },
+  "80": {
+    "name": "Division O.R.L.",
+    "alias_exact": [
+      "Division O.R.L.",
+      "O.R.L.",
+      "o.r.l."
+    ],
+    "alias_common": [
+      "otorrino",
+      "oido",
+      "garganta"
+    ],
+    "require_any": [
+      "orl",
+      "otorrino"
+    ]
+  },
+  "930": {
+    "name": "Ucip - Unidad Cuidados Intensivos Pediatricos Intermedio",
+    "alias_exact": [
+      "-  Cuidados Intensivos Pediatricos Intermedio",
+      "-  cuidados intensivos pediatricos intermedio",
+      "Ucip - Unidad Cuidados Intensivos Pediatricos Intermedio"
+    ],
+    "alias_common": [
+      "ucip intermedio",
+      "ucip"
+    ],
+    "require_any": [
+      "ucip"
+    ],
+    "parent": "28"
+  },
+  "34": {
+    "name": "Departamento Diagnostico Por Imagenes",
+    "alias_exact": [
+      "Departamento Diagnostico Por Imagenes",
+      "Diagnostico Por Imagenes",
+      "diagnostico por imagenes"
+    ],
+    "alias_common": [
+      "imagen",
+      "rx",
+      "tc",
+      "rmn",
+      "eco"
+    ],
+    "require_any": [
+      "imagen",
+      "rx",
+      "tc",
+      "rmn",
+      "radiol",
+      "eco"
+    ]
+  },
+  "906": {
+    "name": "Departamento Informatica",
+    "alias_exact": [
+      "Departamento Informatica",
+      "Informatica",
+      "informatica"
+    ]
+  },
+  "883": {
+    "name": "Division Medicina Nuclear",
+    "alias_exact": [
+      "Division Medicina Nuclear",
+      "Medicina Nuclear",
+      "medicina nuclear"
+    ],
+    "alias_common": [
+      "nuclear",
+      "pet"
+    ],
+    "require_any": [
+      "nuclear",
+      "pet",
+      "spect"
+    ],
+    "parent": "34"
+  },
+  "67": {
+    "name": "Division Endocrinologia",
+    "alias_exact": [
+      "Division Endocrinologia",
+      "Endocrinologia",
+      "endocrinologia"
+    ],
+    "alias_common": [
+      "endo",
+      "diabetes",
+      "tiroides"
+    ],
+    "require_any": [
+      "endo",
+      "tiroid",
+      "diabet"
+    ],
+    "parent": "23"
+  },
+  "70": {
+    "name": "Division Consultorios Externos - Ginecologia",
+    "alias_exact": [
+      "Consultorios Externos - Ginecologia",
+      "Division Consultorios Externos - Ginecologia",
+      "consultorios externos - ginecologia"
+    ],
+    "alias_common": [
+      "gineco"
+    ],
+    "require_any": [
+      "gineco"
+    ],
+    "parent": "33"
+  },
+  "953": {
+    "name": "Division Ginecologia",
+    "alias_exact": [
+      "Division Ginecologia",
+      "Ginecologia",
+      "ginecologia"
+    ],
+    "alias_common": [
+      "gineco",
+      "tocogineco"
+    ],
+    "require_any": [
+      "gineco"
+    ],
+    "parent": "33"
+  },
+  "22": {
+    "name": "Departamento De Hemoterapia",
+    "alias_exact": [
+      "Departamento De Hemoterapia",
+      "Hemoterapia",
+      "hemoterapia"
+    ],
+    "alias_common": [
+      "hemoterapia"
+    ],
+    "require_any": [
+      "hemoter",
+      "transfus"
+    ]
+  },
+  "32": {
+    "name": "Departamento De Salud Mental",
+    "alias_exact": [
+      "Departamento De Salud Mental",
+      "Salud Mental",
+      "salud mental"
+    ],
+    "alias_common": [
+      "psico",
+      "psiqu",
+      "mental"
+    ],
+    "require_any": [
+      "mental",
+      "psico",
+      "psiqu"
+    ]
+  },
+  "983": {
+    "name": "Departamento De Urologia (Catedra)",
+    "alias_exact": [
+      "Departamento De Urologia (Catedra)",
+      "Urologia (Catedra)",
+      "urologia (catedra)"
+    ],
+    "alias_common": [
+      "uro"
+    ],
+    "require_any": [
+      "uro",
+      "endouro",
+      "litias",
+      "prostat"
+    ],
+    "parent": "23"
+  },
+  "77": {
+    "name": "Division Neurocirugia",
+    "alias_exact": [
+      "Division Neurocirugia",
+      "Neurocirugia",
+      "neurocirugia"
+    ],
+    "alias_common": [
+      "neurocir"
+    ],
+    "require_any": [
+      "neurocir",
+      "cirugia",
+      "columna"
+    ]
+  },
+  "60": {
+    "name": "Division Cirugia Oncologica",
+    "alias_exact": [
+      "Cirugia Oncologica",
+      "Division Cirugia Oncologica",
+      "cirugia oncologica"
+    ],
+    "parent": "19"
+  },
+  "28": {
+    "name": "Departamento De Medicina Critica",
+    "alias_exact": [
+      "Departamento De Medicina Critica",
+      "Medicina Critica",
+      "medicina critica"
+    ]
+  },
+  "25": {
+    "name": "Departamento De Medicina (4 Catedra)",
+    "alias_exact": [
+      "Departamento De Medicina (4 Catedra)",
+      "Medicina (4 Catedra)",
+      "medicina (4 catedra)"
+    ]
+  },
+  "91": {
+    "name": "Division Unidad Coronaria",
+    "alias_exact": [
+      "Coronaria",
+      "Division Unidad Coronaria",
+      "coronaria"
+    ],
+    "alias_common": [
+      "unidad coronaria"
+    ],
+    "require_any": [
+      "coronaria"
+    ],
+    "parent": "56"
+  },
+  "58": {
+    "name": "Division Cirugia Experimental",
+    "alias_exact": [
+      "Cirugia Experimental",
+      "Division Cirugia Experimental",
+      "cirugia experimental"
+    ],
+    "require_any": [
+      "cirug"
+    ]
+  },
+  "33": {
+    "name": "Departamento De Tocoginecologia",
+    "alias_exact": [
+      "Departamento De Tocoginecologia",
+      "Tocoginecologia",
+      "tocoginecologia"
+    ],
+    "alias_common": [
+      "gineco"
+    ],
+    "require_any": [
+      "gineco"
+    ]
+  }
+}
