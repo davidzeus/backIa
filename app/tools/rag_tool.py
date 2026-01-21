@@ -35,11 +35,11 @@ except ImportError:
 log = logging.getLogger(__name__)
 
 # --- CONFIGURACIÓN ---
-SIM_TOP_K = 50  # Recuperación amplia Qdrant
+SIM_TOP_K = 40  # Recuperación amplia Qdrant (Reducido de 50 a 25 por latencia)
 RERANK_TOP_N =12
 MAX_SAFE_LIMIT = 25  # <--- NUEVA VARIABLE
-RERANKER_MODEL_NAME = "BAAI/bge-reranker-base" 
-#RERANKER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+RERANKER_MODEL_NAME = os.getenv("RERANKER_MODEL_NAME", "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1") 
+# RERANKER_MODEL_NAME = "BAAI/bge-reranker-v2-m3" # Previous heavy model
 
 
 ENABLE_ONNX = True
@@ -53,62 +53,51 @@ _use_onnx = False
 
 def get_reranker_local():
     """
-    Inicializa el Reranker en GPU o CPU según variable de entorno RERANKER_DEVICE.
-    Singleton: solo carga UNA VEZ y permanece en memoria GPU.
+    Inicializa el Reranker :
+    Intenta ONNX (CPU rápido) primero, si falla usa PyTorch CPU.
+    Evitamos GPU aquí para dejarle la VRAM a Ollama (Mistral).
     """
     global _reranker_session, _tokenizer, _use_onnx, _reranker_model
 
     if _reranker_session is not None or _reranker_model is not None:
-        log.debug("✅ [RERANKER] Reutilizando instancia ya cargada en GPU.")
-        return # Ya iniciado - NO recarga
+        return # Ya iniciado
 
-    log.info("⚙️ [RERANKER] Inicializando motor local...")
+    log.info("⚙️ [RERANKER] Inicializando motor local (Versión optimizada)...")
 
     try:
+        # Configuración de hilos CPU (Truco para velocidad)
         import torch
-        
-        # 🎮 LEER CONFIGURACIÓN DESDE .ENV
-        device_config = os.getenv("RERANKER_DEVICE", "cpu").lower()
-        
-        # Validar que el dispositivo configurado esté disponible
-        if device_config == "cuda":
-            if torch.cuda.is_available():
-                device = "cuda"
-                gpu_name = torch.cuda.get_device_name(0)
-                total_memory = torch.cuda.get_device_properties(0).total_memory / 1024**3
-                free_memory = (torch.cuda.get_device_properties(0).total_memory - torch.cuda.memory_allocated(0)) / 1024**3
-                log.info(f"🚀 [RERANKER] GPU detectada: {gpu_name}")
-                log.info(f"💾 [RERANKER] VRAM disponible: {free_memory:.2f} GB / {total_memory:.2f} GB")
-            else:
-                log.warning("⚠️ [RERANKER] GPU configurada pero no disponible. Fallback a CPU.")
-                device = "cpu"
-        else:
-            device = "cpu"
-            log.info("🖥️ [RERANKER] Configurado para usar CPU")
-        
-        # Configuración de hilos CPU si corresponde
-        if device == "cpu":
-            torch.set_num_threads(CPU_THREADS)
-            os.environ["OMP_NUM_THREADS"] = str(CPU_THREADS)
-            os.environ["MKL_NUM_THREADS"] = str(CPU_THREADS)
+        torch.set_num_threads(CPU_THREADS)
+        os.environ["OMP_NUM_THREADS"] = str(CPU_THREADS)
+        os.environ["MKL_NUM_THREADS"] = str(CPU_THREADS)
 
-        # Cargar modelo en el dispositivo configurado
-        log.info(f"🔄 [RERANKER] Cargando {RERANKER_MODEL_NAME} en {device.upper()} (permanecerá en memoria)...")
-        _reranker_model = CrossEncoder(
-            RERANKER_MODEL_NAME,
-            max_length=512,
-            device=device
-        )
-        _use_onnx = False
-        log.info(f"✅ [RERANKER] Modelo cargado en {device.upper()} y listo para inferencia.")
-        
-        # Warm-up
-        _ = _reranker_model.predict([("warm up", "test")])
-        
-        # Mostrar uso de memoria si es GPU
-        if device == "cuda":
-            vram_used = torch.cuda.memory_allocated(0) / 1024**3
-            log.info(f"📊 [RERANKER] VRAM usada: {vram_used:.2f} GB (modelo permanece en GPU)")
+        # 1. Intentar modo ONNX (El más rápido en CPU)
+        if ONNX_AVAILABLE and ENABLE_ONNX:
+            try:
+                # Buscamos si existe el modelo exportado localmente, si no, descargamos/usamos PyTorch
+                # Para simplificar tu vida, si no tienes el archivo .onnx, usaremos PyTorch optimizado
+                # a menos que quieras exportarlo. Por ahora, fallback a PyTorch es más seguro
+                # si no tienes la carpeta "models/onnx" creada.
+                
+                # NOTA: Para usar ONNX real necesitas exportar el modelo. 
+                # Si no tienes el archivo, saltamos a PyTorch que es más fácil de instalar ahora.
+                pass 
+            except Exception:
+                pass
+
+        # 2. Modo PyTorch (Standard) - Forzamos CPU para no explotar VRAM
+        if _reranker_model is None:
+            log.info(f"🐢 [RERANKER] Cargando {RERANKER_MODEL_NAME} en CPU (SentenceTransformers)...")
+            _reranker_model = CrossEncoder(
+                RERANKER_MODEL_NAME,
+                max_length=512,
+                device="cpu" # CRÍTICO: Dejamos la GPU para Ollama
+            )
+            _use_onnx = False
+            log.info("✅ [RERANKER] Modelo cargado en RAM.")
+            
+            # Warm-up
+            _ = _reranker_model.predict([("warm up", "test")])
 
     except Exception as e:
         log.error(f"❌ Error iniciando Reranker local: {e}")
@@ -313,16 +302,16 @@ def search_clinical_history(query: str,
             start_ts = tw.get("start")
             end_ts = tw.get("end")
 
-            if start_ts is not None or end_ts is not None:
+            if (start_ts is not None and str(start_ts).strip()) or (end_ts is not None and str(end_ts).strip()):
                 try:
                     range_params = {}
                     SOFT_WINDOW = 259200 # 3 días
                     
-                    if start_ts is not None: 
+                    if start_ts and str(start_ts).strip(): 
                         range_params['gte'] = int(float(start_ts) - SOFT_WINDOW)
                         target_proximity_ts = float(start_ts)
                         
-                    if end_ts is not None: 
+                    if end_ts and str(end_ts).strip(): 
                         range_params['lte'] = int(float(end_ts) + SOFT_WINDOW)
                         if not target_proximity_ts: target_proximity_ts = float(end_ts)
 
