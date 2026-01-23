@@ -51,3 +51,21 @@ def get_llm(model: Optional[str] = None) -> Ollama:
         temperature=LLM_TEMPERATURE,
         request_timeout=LLM_TIMEOUT,
     )
+
+@lru_cache(maxsize=1)
+def get_sparse_embedder():
+    """
+    Retorna el modelo de FastEmbed para vectores dispersos (SPLADE/BGE-M3).
+    Se usa para Hybrid Search en Qdrant.
+    """
+    try:
+        from fastembed import SparseTextEmbedding
+        # BGE-M3 es multilingüe y muy potente.
+        # fastembed lo descarga automáticamente a cache.
+        model_name = "prithivida/Splade_PP_en_v1" # O "BAAI/bge-m3" si fastembed lo soporta nativo pronto, pero Splade es el default robusto.
+        # Probemos Qdrant default: "prithivida/Splade_PP_en_v1" funciona muy bien.
+        log.info(f"⚡ [ml_providers] Cargando Sparse Embedder: {model_name}")
+        return SparseTextEmbedding(model_name=model_name)
+    except ImportError:
+        log.error("❌ 'fastembed' no instalado. Sparse vectors no funcionarán.")
+        return None

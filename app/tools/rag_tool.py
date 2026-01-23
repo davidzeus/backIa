@@ -330,14 +330,34 @@ def search_clinical_history(query: str,
                     if is_strict: smart_filter.must.append(Filter(should=s_conds))
                     else: smart_filter.should.extend(s_conds)
 
-        # 3. Retrieval 1 (Smart)
-        log.info(f"🔎 [RAG] Intento 1 (Smart): '{query}' | Target: {target_top_k}")
+        # 3. Retrieval 1 (Smart - HYBRID)
+        log.info(f"🔎 [RAG] Intento 1 (Smart-Hybrid): '{query}' | Target: {target_top_k}")
         
         text_key = detect_qdrant_text_key(COLLECTION, patient_only_filter)
-        store = SafeQdrantVectorStore(client=_qdrant, collection_name=COLLECTION, text_key=text_key)
+        
+        # 🟢 Configurar Store para Hybrid
+        # IMPORTANTE: enable_hybrid=True aquí le dice a LlamaIndex que use query_mode="hybrid"
+        store = SafeQdrantVectorStore(
+            client=_qdrant, 
+            collection_name=COLLECTION, 
+            text_key=text_key,
+            enable_hybrid=True, # 🟢 Activa Hybrid Search
+            fastembed_sparse_model="prithivida/Splade_PP_en_v1", # Usar el mismo modelo que en ingesta
+            dense_vector_name="text-dense",   # ✅ Coincidir con esquema manual
+            sparse_vector_name="text-sparse"  # ✅ Coincidir con esquema manual
+        )
+        
         index = VectorStoreIndex.from_vector_store(store, embed_model=embed_model)
         
-        retriever = index.as_retriever(similarity_top_k=dynamic_sim_k, vector_store_kwargs={"qdrant_filters": smart_filter})
+        # 🟢 Configurar Retriever
+        retriever = index.as_retriever(
+            similarity_top_k=dynamic_sim_k, 
+            vector_store_kwargs={
+                "qdrant_filters": smart_filter,
+                "vector_store_query_mode": "hybrid", # 🟢 Explicito
+                "alpha": 0.5, # ⚖️ Balance Dense/Sparse (0.5 = igual peso, 0.0 = solo sparse, 1.0 = solo dense)
+            }
+        )
         nodes = retriever.retrieve(query)
         
         # --- 3.5 FALLBACK DE SEGURIDAD (BOTÓN DE PÁNICO) ---

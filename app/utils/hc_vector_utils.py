@@ -254,8 +254,16 @@ def upsert_snapshot_marker(
         "ingestion_ts": datetime.utcnow().isoformat(),
     }
     zeros = [0.0] * int(embedding_dim)
-    batch = Batch(ids=[pid], vectors=[zeros], payloads=[payload])
-    log.debug("HC_MARKER_UPSERT | point_id=%s | collection=%s", pid, collection_name)
+    # Para colección híbrida, debemos pasar vectores nombrados
+    # text-dense: array de ceros
+    # text-sparse: vacío
+    batch_vectors = {
+        "text-dense": [zeros],
+        "text-sparse": [{"indices": [], "values": []}]
+    }
+    
+    batch = Batch(ids=[pid], vectors=batch_vectors, payloads=[payload])
+    log.debug("HC_MARKER_UPSERT | point_id=%s | collection=%s (Hybrid)", pid, collection_name)
     client.upsert(collection_name=collection_name, points=batch, wait=True)
 
 

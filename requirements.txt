@@ -66,3 +66,4 @@ optimum
 qdrant-client[fastembed]
 
 python-tds==1.17.1
+fastembed

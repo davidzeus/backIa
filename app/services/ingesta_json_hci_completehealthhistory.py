@@ -1,29 +1,28 @@
 # app/services/ingesta_json_hci_completehealthhistory.py
 """
-Ingesta HC -> Qdrant (simple y robusto con snapshot marker)
-- Colección única: hc_chat_db
+Ingesta HC -> Qdrant (Hybrid: Dense + Sparse SPLADE)
+- Colección: hc_chat_db_hybrid
+- Genera vectores densos (para contexto semántico) y dispersos (para keywords exactas).
 - Si snapshot (paciente_id + document_id) ya existe => NO-OP
-- Si no existe => DELETE-ALL (paciente) + INSERT ALL + insertar marker (top-level)
 """
 
 import logging
 import os
 import re
+import gc
 from collections import defaultdict
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
-import re
 
 from llama_index.core.schema import TextNode
 from llama_index.core import Document, VectorStoreIndex, StorageContext
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core.schema import TextNode
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 from qdrant_client.http.exceptions import UnexpectedResponse
-from qdrant_client.http.models import Distance, VectorParams, PayloadSchemaType
+from qdrant_client.http.models import Distance, VectorParams, PayloadSchemaType, SparseVectorParams, SparseIndexParams, PointStruct
 
 from app.infra.qdrant_client_factory import get_qdrant_client
-from app.infra.ml_providers import get_embedder
+from app.infra.ml_providers import get_embedder, get_sparse_embedder
 
 from app.utils.agrupar_y_formatear_items_hc import (
     _canon_fecha_y_ts,
@@ -47,7 +46,7 @@ from app.utils.hc_vector_utils import (
 # -----------------------------------------------------------------------------
 # CONFIG
 # -----------------------------------------------------------------------------
-COLLECTION_NAME = os.getenv("QDRANT_COLLECTION", "hc_chat_db")
+COLLECTION_NAME = os.getenv("QDRANT_COLLECTION", "hc_chat_db_hybrid") # 🟢 Nombre actualizado
 
 EMBEDDING_DIM = int(os.getenv("EMBEDDING_DIM", "384"))  # usado por la colección
 CHUNK_SIZE = int(os.getenv("HC_CHUNK_SIZE", "1000"))
@@ -197,85 +196,68 @@ def agrupar_items_usando_linea_de_tiempo(
     return all_chunks
 
 
-#==Helpers====================================================================
-def _sanitize_text(s: str) -> str:
-    if not s:
-        return ""
-    s = s.replace("\x00", " ")
-    s = _rx_space.sub(" ", s)
-    return s.strip()
-
-def _is_nonempty_text(s: str) -> bool:
-    """Texto no vacío y mínimamente útil (≥5 chars y ≈2 tokens si es corto)."""
-    if not s:
-        return False
-    s = s.strip()
-    if len(s) < _MIN_CHARS:
-        return False
-    # si es muy corto, exigir al menos 2 tokens
-    if len(s) < 8 and len(s.split()) < _MIN_TOKENS2:
-        return False
-    return True
-
-def _final_gate_nonempty(nodes: List[TextNode], paciente_id: str) -> (List[TextNode], int):
-    """Sanea, valida y completa metadatos mínimos por chunk; descarta vacíos."""
-    kept, dropped = [], 0
-    for n in nodes:
-        txt = _sanitize_text(getattr(n, "text", "") or "")
-        if not _is_nonempty_text(txt):
-            dropped += 1
-            continue
-
-        md = dict(n.metadata or {})
-        # mínimos garantizados
-        md.setdefault("seccion", "SIN_SECCION")
-        md.setdefault("seccion_raiz", "SIN_SECCION")
-        md.setdefault("fecha", "")
-        md.setdefault("fecha_ts", 0)
-        md["paciente_id"] = str(paciente_id)
-
-        # longitud del CHUNK real (no del evento)
-        md["texto_len"] = len(txt)
-
-        n.text = txt
-        n.metadata = md
-        kept.append(n)
-    return kept, dropped
-
 # -----------------------------------------------------------------------------
 # 2) Guardado en Qdrant (NO-OP o REPLACE + marker)
 # -----------------------------------------------------------------------------
 def _asegurar_coleccion_qdrant():
     client = get_qdrant_client()
+    
+    must_recreate = False
     if not client.collection_exists(COLLECTION_NAME):
-        log.debug("📦 Creando colección '%s'", COLLECTION_NAME)
+        must_recreate = True
+    else:
+        # Validar esquema existente
+        try:
+            info = client.get_collection(COLLECTION_NAME)
+            vect_cfg = info.config.params.vectors
+            # Si no es diccionario (es vector default) o no tiene la clave 'text-dense'
+            if not isinstance(vect_cfg, dict) or "text-dense" not in vect_cfg:
+                log.warning(f"⚠️ Colección '{COLLECTION_NAME}' tiene esquema antiguo (sin 'text-dense'). Se recreará.")
+                must_recreate = True
+        except Exception as e:
+            log.warning(f"No se pudo inspeccionar colección {COLLECTION_NAME}: {e}. Se intentará recrear.")
+            must_recreate = True
+
+    if must_recreate:
+        log.info("📦 Creando colección HYBRID '%s' (text-dense + text-sparse)", COLLECTION_NAME)
         client.recreate_collection(
             collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=EMBEDDING_DIM, distance=Distance.COSINE),
+            vectors_config={
+                "text-dense": VectorParams(size=EMBEDDING_DIM, distance=Distance.COSINE)
+            },
+            sparse_vectors_config={
+                "text-sparse": SparseVectorParams(
+                    index=SparseIndexParams(
+                        on_disk=False, 
+                    )
+                )
+            }
         )
-    # Índices para filtros veloces (idempotentes; si existen, Qdrant lo avisa y seguimos)
-    for field, schema in [
-        ("paciente_id",        PayloadSchemaType.KEYWORD),
-        ("procedureNumber",    PayloadSchemaType.INTEGER),
-        ("fecha_ts",           PayloadSchemaType.INTEGER),
-        ("servicio_id",        PayloadSchemaType.INTEGER),
-        ("servicio",           PayloadSchemaType.KEYWORD),
-        ("group",              PayloadSchemaType.KEYWORD),
-        ("healthHistoryGroup", PayloadSchemaType.KEYWORD),
-        ("name",               PayloadSchemaType.KEYWORD),
-        ("marker",             PayloadSchemaType.KEYWORD),
-        ("source",             PayloadSchemaType.KEYWORD),
-        ("texto_len",          PayloadSchemaType.INTEGER),
-        ("document_id",        PayloadSchemaType.KEYWORD),
-    ]:
-        try:
-            client.create_payload_index(
-                collection_name=COLLECTION_NAME,
-                field_name=field,
-                field_schema=schema,
-            )
-        except Exception as e:
-            log.debug("create_payload_index('%s') → %s", field, e)
+        
+        # Índices de Payload
+        for field, schema in [
+            ("paciente_id",        PayloadSchemaType.KEYWORD),
+            ("procedureNumber",    PayloadSchemaType.INTEGER),
+            ("fecha_ts",           PayloadSchemaType.INTEGER),
+            ("servicio_id",        PayloadSchemaType.INTEGER),
+            ("servicio",           PayloadSchemaType.KEYWORD),
+            ("group",              PayloadSchemaType.KEYWORD),
+            ("healthHistoryGroup", PayloadSchemaType.KEYWORD),
+            ("name",               PayloadSchemaType.KEYWORD),
+            ("marker",             PayloadSchemaType.KEYWORD),
+            ("source",             PayloadSchemaType.KEYWORD),
+            ("texto_len",          PayloadSchemaType.INTEGER),
+            ("document_id",        PayloadSchemaType.KEYWORD),
+            ("node_hash",          PayloadSchemaType.KEYWORD),
+        ]:
+            try:
+                client.create_payload_index(
+                    collection_name=COLLECTION_NAME,
+                    field_name=field,
+                    field_schema=schema,
+                )
+            except Exception as e:
+                log.debug("create_payload_index('%s') → %s", field, e)
 
 
 
@@ -283,146 +265,130 @@ def guardar_chunks(
     chunks: Dict[str, List[Document]],
     paciente_id: str,
 ) -> Dict[str, Any]:
-    """
-    Lógica determinista:
-      1) Calcula document_id (hash del snapshot)
-      2) Si existe snapshot marker => NO-OP
-      3) Si no existe => DELETE-ALL (paciente) + INSERT ALL + insertar marker
-    """
     try:
         client = get_qdrant_client()
         _asegurar_coleccion_qdrant()
 
-        # Flatten
+        # 1. Preparar Nodos (Saneamiento)
         all_nodes: List[Document] = [n for nodos in chunks.values() for n in nodos]
-
-        # 🚪 Puerta final anti-vacío
         all_nodes, dropped = _final_gate_nonempty(all_nodes, paciente_id)
-        if dropped:
-            log.warning("⚠️ Nodos descartados por texto vacío/corto: %s", dropped)
-
+        
         if not all_nodes:
-            log.warning("No se generaron nodos válidos; no se insertará nada en Qdrant.")
-            return {
-                "mensaje": "No hay datos clínicos válidos para almacenar.",
-                "paciente_id": paciente_id,
-                "nodos_omitidos": dropped,
-            }
+            return {"mensaje": "Sin datos válidos.", "paciente_id": paciente_id, "inserted": 0, "nodos_omitidos": dropped}
 
-        # IDs determinísticos y hash
-        seen_hashes = set()
-        dedup_nodes: List[Document] = []
-        for n in all_nodes:
-            # hash por contenido (dedupe)
-            node_h = _node_hash_text(n.text)
-            if node_h in seen_hashes:
-                continue
-            seen_hashes.add(node_h)
-
-            seccion = str(n.metadata.get("seccion", ""))
-            fecha   = str(n.metadata.get("fecha", ""))
-            pid     = _point_id_for_node(str(paciente_id), n.text, seccion, fecha)
-            try:
-                n.id_ = pid  # TextNode.id_ (LlamaIndex)
-            except Exception:
-                n.metadata["point_id"] = pid
-
-            n.metadata["node_hash"] = node_h
-            dedup_nodes.append(n)
-
-        if not dedup_nodes:
-            return {
-                "mensaje": "Todos los nodos eran duplicados o inválidos.",
-                "paciente_id": paciente_id,
-                "inserted": 0,
-                "deleted": 0,
-            }
-
-        # Snapshot hash (estable)
-        document_id = _snapshot_hash_from_nodes(dedup_nodes)
-        log.debug(
-            "HC_DOC_ID | patient_id=%s | document_id=%s | nodes=%s",
-            paciente_id, document_id, len(dedup_nodes),
-        )
-
+        # 2. Check Snapshot (Idempotencia)
+        document_id = _snapshot_hash_from_nodes(all_nodes)
+        
         # ---- NO-OP si el snapshot ya existe ----
         if _snapshot_marker_exists(client, COLLECTION_NAME, paciente_id, document_id):
-            log.debug("🔁 Snapshot existente (NO-OP) | patient=%s | doc=%s", paciente_id, document_id)
+            log.info("🔁 Snapshot ya existente (NO-OP) | patient=%s | doc=%s", paciente_id, document_id)
             return {
                 "mensaje": "La historia clínica no ha cambiado y ya estaba almacenada.",
                 "paciente_id": paciente_id,
                 "document_id": document_id,
                 "inserted": 0,
-                "deleted": 0,
                 "change_ratio": 0.0,
-                "source": "hci",
+                "source": "hci_hybrid"
             }
 
-        # (Informativo) contar previos para métricas
-        prev_total = 0
+        # Limpieza previa de este paciente (Delete old versions)
         try:
-            flt_prev = _make_filter_patient_source(paciente_id, meta_prefix=True)
-            prev_total = _client_count(client, COLLECTION_NAME, flt_prev)
-            if prev_total == 0:
-                flt_prev = _make_filter_patient_source(paciente_id, meta_prefix=False)
-                prev_total = _client_count(client, COLLECTION_NAME, flt_prev)
-        except Exception as e:
-            log.warning("HC_PREV_COUNT_WARN | %s", e)
-            prev_total = 0
-
-        # Completar payload común
-        now_iso = datetime.utcnow().isoformat()
-        for n in dedup_nodes:
-            n.metadata.update(
-                {
-                    "paciente_id": str(paciente_id),
-                    "document_id": document_id,
-                    "source": "hci",
-                    "ingestion_ts": now_iso,
-                }
-            )
-
-        # DELETE-ALL del paciente
-        for meta in (True, False):
-            try:
+            for meta in (True, False):
                 flt_del = _make_filter_patient_source(paciente_id, meta_prefix=meta)
                 _delete_by_filter(client, COLLECTION_NAME, flt_del)
-            except Exception as e:
-                log.warning("HC_DELETE_WARN | meta_prefix=%s | %s", meta, e)
+        except Exception:
+            pass
 
-        # INSERT ALL (con embedder explícito y storage contextualizado)
-        embedder = get_embedder()
-        store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME)
-        storage_context = StorageContext.from_defaults(vector_store=store)
-        index = VectorStoreIndex.from_vector_store(store, storage_context=storage_context, embed_model=embedder)
+        # 3. PROCESAMIENTO HÍBRIDO POR LOTES (Manual Control)
+        # BATCH_SIZE pequeño para evitar que SPLADE consuma toda la RAM
+        BATCH_SIZE = 16 
+        total_nodes = len(all_nodes)
+        
+        log.info(f"🚀 Procesando {total_nodes} nodos HÍBRIDOS en lotes de {BATCH_SIZE}...")
 
-        # Inserción (LlamaIndex hace batch interno; si tu versión soporta batch_size, podés pasarlo)
-        index.insert_nodes(dedup_nodes)
+        dense_model = get_embedder()      # Tu modelo HuggingFace
+        sparse_model = get_sparse_embedder() # Tu modelo FastEmbed (SPLADE)
+        
+        now_iso = datetime.utcnow().isoformat()
+        inserted_count = 0
 
-        # INSERT marker en top-level (para futuros NO-OP)
+        for i in range(0, total_nodes, BATCH_SIZE):
+            # A. Slice del lote
+            batch_nodes = all_nodes[i : i + BATCH_SIZE]
+            batch_texts = [n.text for n in batch_nodes]
+            
+            # B. Generación de Vectores (Aquí controlamos la memoria)
+            # 1. Dense (Semántico)
+            batch_dense = [dense_model.get_text_embedding(t) for t in batch_texts]
+            
+            # 2. Sparse (Keywords/SPLADE) - Convertimos generador a lista
+            batch_sparse = list(sparse_model.embed(batch_texts))
+            
+            # C. Construcción de Puntos Qdrant
+            points = []
+            for j, node in enumerate(batch_nodes):
+                # ID determinístico y Hash
+                node_h = _node_hash_text(node.text)
+                seccion = str(node.metadata.get("seccion", ""))
+                fecha = str(node.metadata.get("fecha", ""))
+                pid = _point_id_for_node(str(paciente_id), node.text, seccion, fecha)
+                
+                # Payload enriquecido
+                payload = node.metadata.copy()
+                payload.update({
+                    "document_id": document_id,
+                    "ingestion_ts": now_iso,
+                    "node_hash": node_h,
+                    "source": "hci",
+                    # Guardamos el JSON del nodo para compatibilidad futura con LlamaIndex
+                    "_node_content": node.json(exclude={"embedding"}) 
+                })
+                
+                # Extraemos el vector sparse del objeto de FastEmbed
+                sp_vec = batch_sparse[j]
+                
+                # Creamos el punto con AMBOS vectores (Named Vectors)
+                points.append(PointStruct(
+                    id=pid,
+                    payload=payload,
+                    vector={
+                        "text-dense": batch_dense[j],
+                        "text-sparse": {
+                            "indices": sp_vec.indices.tolist(),
+                            "values": sp_vec.values.tolist()
+                        }
+                    }
+                ))
+            
+            # D. Subida Directa (Bypassing LlamaIndex insert)
+            client.upsert(collection_name=COLLECTION_NAME, points=points)
+            inserted_count += len(points)
+            
+            # E. Limpieza de Memoria Inmediata
+            del batch_dense
+            del batch_sparse
+            del points
+            gc.collect() 
+            
+            log.info(f"   ✅ Lote {i//BATCH_SIZE + 1} subido ({min(i+BATCH_SIZE, total_nodes)}/{total_nodes})")
+
+        # 4. Insertar Marker Final
         _upsert_snapshot_marker(client, COLLECTION_NAME, paciente_id, document_id, EMBEDDING_DIM)
 
-        # (Opcional) verificar marker
-        marker_ok = _snapshot_marker_exists(client, COLLECTION_NAME, paciente_id, document_id)
-        log.debug("HC_MARKER_POSTCHECK | patient=%s | doc=%s | exists=%s", paciente_id, document_id, marker_ok)
-
-        inserted = len(dedup_nodes) + 1  # +1 marker
-        log.debug("✅ Replace completo | patient=%s | inserted=%s | deleted≈%s", paciente_id, inserted, prev_total)
+        log.info(f"✅ Ingesta Híbrida completada. Insertados: {inserted_count}")
 
         return {
-            "mensaje": "Historia clínica actualizada con nuevos datos.",
+            "mensaje": "Historia clínica HÍBRIDA actualizada.", 
             "paciente_id": paciente_id,
             "document_id": document_id,
-            "inserted": inserted,
-            "deleted": prev_total,
-            "change_ratio": None,
-            "source": "hci",
+            "inserted": inserted_count, 
+            "mode": "Hybrid (Dense + SPLADE)"
         }
 
     except UnexpectedResponse as ur:
         log.error("Error Qdrant: %s - %s", ur.status_code, ur.content)
         return {"error": "Error inesperado al comunicarse con Qdrant"}
     except Exception as exc:
-        log.exception("Fallo general al guardar en Qdrant: %s", exc)
-        return {"error": "Fallo general al guardar en Qdrant"}
-
+        log.exception("❌ Error Crítico en Ingesta Híbrida: %s", exc)
+        gc.collect() # Intento final de limpieza
+        return {"error": str(exc)}

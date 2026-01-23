@@ -11,10 +11,10 @@ from agno.db.redis import RedisDb
 
 from app.schemas.esquema import ConsultaQdrantRequest
 # ✅ Herramienta Manual probada
-from app.tools.rag_tool import search_clinical_history 
+from app.tools.rag_tool import search_clinical_history
 from app.tools.planner_tool import get_query_plan_tools
 from app.utils.context_manager import (
-    set_patient_context, clear_patient_context, 
+    set_patient_context, clear_patient_context,
     get_agent_sources, set_agent_sources, clear_agent_sources
 )
 
@@ -26,7 +26,7 @@ if not bool(int(str(_DEBUG_FLAG))):
 
 # --- CONFIGURACIÓN DE AGENTE ---
 # Usamos MedGemma como motor principal
-AGENT_MODEL_NAME = os.getenv("LLM_MODEL_AGENT", "medgemma:4b") 
+AGENT_MODEL_NAME = os.getenv("LLM_MODEL_AGENT", "medgemma:4b")
 
 AGENT_BASE_URL = os.getenv("LLM_BASE_URL", "http://localhost:11434")
 REDIS_URL = os.getenv("REDIS_URL", "redis://10.10.0.48:6379/0")
@@ -38,9 +38,9 @@ def get_storage() -> RedisDb:
 # app/services/agent_service.py (Solo la función get_clinical_agent actualizada)
 
 def get_clinical_agent(
-    session_id: str, 
-    user_id: str, 
-    context_data: str, 
+    session_id: str,
+    user_id: str,
+    context_data: str,
     planner_info: str,
     is_summary: bool
 ) -> Agent:
@@ -51,31 +51,19 @@ def get_clinical_agent(
         "Eres SAMI, un asistente médico eficiente.",
         "Tu tarea es leer la === HISTORIA CLÍNICA === y extraer datos veraces.",
         "NO inventes información. Si no hay datos, indica 'Sin registros'.",
+        "**IDIOMA:** RESPONDE SIEMPRE Y ÚNICAMENTE EN ESPAÑOL. Traduce si es necesario.",
+        "**CONCISIÓN:** Evita listas repetitivas. Si hay muchos elementos, agrúpalos.",
     ]
 
     # --- 2. INSTRUCCIONES ESPECÍFICAS (ANTI-BUCLES) ---
     if is_summary:
         specific_instructions = [
-            "### TAREA: EXTRACCIÓN ESTRUCTURADA",
-            "El usuario necesita un resumen en formato JSON válido.",
-            "Identifica: Medicamentos Activos, Diagnósticos y Antecedentes.",
-            "",
-            "### REGLAS DE FORMATO (CRÍTICAS):",
-            "1. NO uses listas con viñetas (*).",
-            "2. NO repitas palabras como 'Antecedente de antecedentes'.",
-            "3. Tu salida debe ser UNICAMENTE el bloque JSON.",
-            "4. VALORES ÚNICOS: No repitas el mismo medicamento o diagnóstico en la lista.",
-            "5. NO alucines ni inventes datos para rellenar.",
-            "",
-            "### EJEMPLO DE SALIDA ESPERADA:",
-            "```json",
-            "{",
-            '  "alergias": ["Penicilina", "Yodo"],',
-            '  "medicamentos": ["Enalapril 10mg", "Metformina 850mg"],',
-            '  "diagnosticos": ["Diabetes Tipo 2", "Hipertensión"],',
-            '  "antecedentes": ["Apendicectomía (2015)"]',
-            "}",
-            "```"
+            "MODO RESUMEN: Sintetiza la información.",
+            "Extrae hechos que coincidan con la solicitud.",
+            "Identifica relaciones Causa-Efecto.",
+            "Si se solicitan medicamentos, extrae TODOS (genéricos y marcas comerciales).",
+            "REGLA DE ORO: Solo usa fechas explícitas en los registros.",
+            "Si el dato no está, responde: 'No hay registros disponibles.'",
         ]
     else:
         specific_instructions = [
@@ -87,7 +75,7 @@ def get_clinical_agent(
     # --- 3. FORMATO DE CIERRE ---
     formatting_instructions = [
         "",
-        "Piensa paso a paso en **ANÁLISIS CLÍNICO** y luego da la **RESPUESTA FINAL**.",
+        #"Piensa paso a paso en **ANÁLISIS CLÍNICO** y luego da la **RESPUESTA FINAL**.",
         "<end_of_turn>",
         "<start_of_turn>model"
     ]
@@ -97,17 +85,17 @@ def get_clinical_agent(
     return Agent(
         name="SAMI",
         model=Ollama(
-            id=AGENT_MODEL_NAME, 
+            id=AGENT_MODEL_NAME,
             host=AGENT_BASE_URL,
             options={
-                "temperature": 0.0,    
-                "num_ctx": 8192,       
-                "num_predict": 2048,   # Reducimos para evitar verborragia infinita
-                "top_k": 40,           
-                "top_p": 0.9,
+                "temperature": 0.1, # Subir de 0.0 a 0.1 introduce leve "ruido" que rompe bucles
+                "num_ctx": 8192,
+                "num_predict": 1024,   # 2048 Reducimos para evitar verborragia infinita
+                "top_k": 40,
+                "top_p": 0.95, # Aumentar un poco para variedad
                 
                 # --- 🔧 AJUSTE CLAVE ANTI-BUCLES ---
-                "repeat_penalty": 1.5, # Ajustado
+                "repeat_penalty": 1.15, # 1.5
                 "stop": ["<end_of_turn>", "User:", "Observation:", "```\n\n", "}]", "}\n"],
                 
                 # --- EXPERIMENTAL: Mirostat para evitar colapso repetitivo ---
@@ -116,11 +104,11 @@ def get_clinical_agent(
                 "mirostat_eta": 0.1
             }
         ),
-        db=get_storage(), 
+        db=get_storage(),
         session_id=session_id,
         user_id=user_id,
         add_name_to_context=True,
-        reasoning=False, 
+        reasoning=True,
         debug_mode=bool(int(str(_DEBUG_FLAG))),
         description="Asistente Médico de IA",
         instructions=full_instructions,
@@ -154,7 +142,7 @@ def is_internal_error(text: str) -> bool:
 # --- PREPARACIÓN DEL CONTEXTO ---
 async def _prepare_agent_execution(request: ConsultaQdrantRequest) -> Dict[str, Any]:
     token_pid = set_patient_context(request.paciente_id)
-    token_sources = set_agent_sources([]) 
+    token_sources = set_agent_sources([])
     internal_session_id = f"{request.session_id}::{request.paciente_id}"
 
     try:
@@ -162,14 +150,14 @@ async def _prepare_agent_execution(request: ConsultaQdrantRequest) -> Dict[str, 
         plan = get_query_plan_tools(request.pregunta)
         is_summary = plan.get("is_summary", False)
         # Aumentamos el límite para resumen para capturar toda la medicación
-        doc_limit = 50 if is_summary else 15 
+        doc_limit = 30 if is_summary else 15
         
         # 2. RAG RETRIEVAL (Tu herramienta potente)
         log.info(f"🔎 [RAG] Buscando para '{request.paciente_id}' (Docs: {doc_limit})...")
         raw_results = search_clinical_history(
-            request.pregunta, 
-            qdrant_filters=plan, 
-            strict=plan.get("strict", False), 
+            request.pregunta,
+            qdrant_filters=plan,
+            strict=plan.get("strict", False),
             limit=doc_limit
         )
 
@@ -187,7 +175,7 @@ async def _prepare_agent_execution(request: ConsultaQdrantRequest) -> Dict[str, 
 
         # 3. AGENTE
         agent = get_clinical_agent(
-            session_id=internal_session_id, 
+            session_id=internal_session_id,
             user_id=request.user_id,
             context_data=evidence_text,
             planner_info=planner_info_msg,
@@ -196,7 +184,7 @@ async def _prepare_agent_execution(request: ConsultaQdrantRequest) -> Dict[str, 
 
         return {
             "agent": agent,
-            "user_msg": request.pregunta, 
+            "user_msg": request.pregunta,
             "token_pid": token_pid,
             "token_sources": token_sources,
             "session_id": request.session_id,
@@ -359,10 +347,10 @@ async def run_agent_consult_stream(request: ConsultaQdrantRequest):
             if "**RESPUESTA FINAL:**" in buffer:
                 # Si acabamos de cruzar el umbral
                 if "**RESPUESTA FINAL:**" in content:
-                     yield {"type": "meta", "status": "thinking_end"}
+                      yield {"type": "meta", "status": "thinking_end"}
                 else:
-                     # Estamos escribiendo la respuesta final
-                     yield {"type": "token", "text": content}
+                      # Estamos escribiendo la respuesta final
+                      yield {"type": "token", "text": content}
             else:
                 # Estamos en análisis
                 yield {"type": "reasoning_token", "text": content}
@@ -415,9 +403,9 @@ async def run_agent_consult(request: ConsultaQdrantRequest) -> Dict[str, Any]:
         latency = round(time.perf_counter() - start_time, 2)
         
         return {
-            "respuesta": clean_ans, 
-            "reasoning": reasoning, 
-            "sources": get_agent_sources(), 
+            "respuesta": clean_ans,
+            "reasoning": reasoning,
+            "sources": get_agent_sources(),
             "session_id": context["session_id"],
             "meta": {
                 **context["meta_base"],

@@ -21,7 +21,7 @@ _DEBUG_FLAG = os.getenv("HCI_DEBUG", os.getenv("HCI_DEBUG", "0"))
 if not bool(int(str(_DEBUG_FLAG))):
     log.setLevel(logging.WARNING)
 
-COLLECTION = os.getenv("QDRANT_COLLECTION", "hc_chat_db")
+COLLECTION = os.getenv("QDRANT_COLLECTION", "hc_chat_db_hybrid")
 _qdrant = get_qdrant_client()
 
 
