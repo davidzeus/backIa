@@ -201,7 +201,7 @@
     {
         "paciente_id": "163234",
         "categoria": "Contexto Quirúrgico (D)",
-        "pregunta": "¿Cuál fue el motivo de internación original y qué cirugía se realizó?",
+        "pregunta": "¿Cuál fue el motivo de la primera internación y qué cirugía se realizó?",
         "respuesta_esperada": "Motivo: Adenocarcinoma de colon derecho. Cirugía: Hemicolectomía derecha.",
         "sources": [
             "Ingreso / Carátula"

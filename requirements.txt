@@ -67,3 +67,13 @@ qdrant-client[fastembed]
 
 python-tds==1.17.1
 fastembed
+
+###################
+# DEV - para pruebas
+######################
+# ragas
+# datasets
+# pandas
+
+#pip install -U ragas langchain-openai langchain-community
+#pip install matplotlib
