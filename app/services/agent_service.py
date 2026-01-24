@@ -95,7 +95,8 @@ def get_clinical_agent(
                 "top_p": 0.95, # Aumentar un poco para variedad
                 
                 # --- 🔧 AJUSTE CLAVE ANTI-BUCLES ---
-                "repeat_penalty": 1.15, # 1.5
+                "repeat_penalty": 1.2, # 1.5
+                "frequency_penalty": 1.1, # 🔥 AGREGADO: Penaliza repetir la misma frase muchas veces
                 "stop": ["<end_of_turn>", "User:", "Observation:", "```\n\n", "}]", "}\n"],
                 
                 # --- EXPERIMENTAL: Mirostat para evitar colapso repetitivo ---
@@ -196,32 +197,32 @@ async def _prepare_agent_execution(request: ConsultaQdrantRequest) -> Dict[str, 
         if 'token_sources' in locals(): clear_agent_sources(token_sources)
         raise
 
-def _extract_list_from_text_deprecated(text: str, key: str) -> list[str]:
-    """Extrae y deduplica una lista JSON simple usando regex robusto."""
-    import re
-    # Busca patrones tipo "key": [ ... ]
-    pattern = rf'"{key}"\s*:\s*\[(.*?)\]'
-    match = re.search(pattern, text, re.DOTALL)
-    
-    clean_items = []
-    if match:
-        content = match.group(1)
-        # Extraer items entre comillas dobles
-        raw_items = re.findall(r'"([^"]*)"', content)
+# --- UTILIDADES DE LIMPIEZA ---
+def _clean_json_duplicates(json_str: str) -> str:
+    """
+    Toma un string JSON, lo parsea, elimina duplicados en listas y lo devuelve.
+    Si falla, devuelve el original. Esto es MUCHO más seguro que filtrar texto.
+    """
+    try:
+        # Encontramos el bloque JSON si hay texto alrededor
+        start = json_str.find('{')
+        end = json_str.rfind('}') + 1
+        if start == -1 or end == 0: return json_str
         
-        # Deduplicar preservando orden (case insensitive para mayor seguridad)
-        seen = set()
-        for item in raw_items:
-            # Limpieza básica
-            i = item.strip()
-            if not i: continue
-            
-            i_lower = i.lower()
-            if i_lower not in seen:
-                seen.add(i_lower)
-                clean_items.append(i)
+        core_json = json_str[start:end]
+        data = json.loads(core_json)
+        
+        # Recorremos y limpiamos listas
+        for key, value in data.items():
+            if isinstance(value, list):
+                # Elimina duplicados manteniendo orden (Python 3.7+)
+                cleaned_list = list(dict.fromkeys(value))
+                data[key] = cleaned_list
                 
-    return clean_items
+        # Reconstruimos el JSON limpio
+        return f"```json\n{json.dumps(data, indent=2, ensure_ascii=False)}\n```"
+    except Exception:
+        return json_str
 
 def _extract_list_from_text(text: str, key: str) -> list[str]:
     """
@@ -317,6 +318,7 @@ def parse_medgemma_output(full_text: str) -> tuple[str, str]:
             pass
 
     return reasoning, answer
+
 
 # --- EJECUCIÓN STREAMING MEJORADA ---
 async def run_agent_consult_stream(request: ConsultaQdrantRequest):
