@@ -60,12 +60,11 @@ app.add_middleware(
 
 # ── Rutas ────────────────────────────────────────────────────────
 from app.routes.hc_router import router as hc_router  
-from app.routes.agents.agent_agno_router import router as agent_agno_router 
-from app.routes.patrimony_router import router as patrimony_router 
+from app.routes.vision_router import router as vision_router
 
 app.include_router(hc_router)
-app.include_router(patrimony_router)
-app.include_router(agent_agno_router)
+
+app.include_router(vision_router)
 
 
 # ── Ejecutar app (solo dev) ──────────────────────────────────────

@@ -6,6 +6,7 @@ pydantic==2.11.9
 # LlamaIndex core packages (versions that work together)
 llama-index-core==0.12.52.post1
 llama-index-llms-ollama==0.6.2
+llama-index-multi-modal-llms-ollama
 llama-index-embeddings-huggingface==0.5.5
 llama-index-vector-stores-qdrant==0.6.1
 llama-index>=0.10
@@ -19,6 +20,7 @@ qdrant-client==1.15.1
 # Document processing
 python-docx==1.2.0
 beautifulsoup4==4.13.5
+pillow>=10.0.0
 
 # HTTP and async
 requests==2.32.5

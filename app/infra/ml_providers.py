@@ -46,7 +46,7 @@ def get_embedder() -> HuggingFaceEmbedding:
 def get_llm(model: Optional[str] = None) -> Ollama:
     """Instancia LLM por petición (evita estado global)."""
     return Ollama(
-        model=model or LLM_MODEL_QA,
+        model=LLM_MODEL_AGENT,
         base_url=LLM_BASE_URL,
         temperature=LLM_TEMPERATURE,
         request_timeout=LLM_TIMEOUT,

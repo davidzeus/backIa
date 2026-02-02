@@ -19,18 +19,13 @@ from app.services.ingesta_json_hci_completehealthhistory import (
     guardar_chunks,
 )
 
-from app.services.resumen_hci_completehealthhistory_por_seccion_service import (
-    resumir_hc_por_seccion,
-)
 
-from app.services.query_engine_manager_service import get_router, query_hc, stream_hc
+
+
 from sse_starlette.sse import EventSourceResponse
 import time, json
 
-from app.services.query_engine_manager_service import (
-    get_router,          # dependency existente
-    query_hc_stream,     # <- NUEVO: stream de eventos (token/end/error)
-)
+
 from app.services.agent_service import run_agent_consult, run_agent_consult_stream, delete_agent_session # 🆕 Servicio Agente
 
 
@@ -65,7 +60,7 @@ class IngestaResponse(BaseModel):
 
 @router.post(
     "/ingesta-DataPatient",
-    summary="(POST) Busca paciente en (http://10.10.18.35:4444/api/patient/?patientIdentification=28073163&patientTypeIdentificationId=1) con parámetros flexibles y carga/actualiza su HC en Qdrant",
+    summary="(POST) Busca paciente en (http://xx.xx.xx.xx:xxxx/api/patient/?patientIdentification=28073163&patientTypeIdentificationId=1) con parámetros flexibles y carga/actualiza su HC en Qdrant",
     response_model=IngestaResponse,
 )
 async def buscar_paciente_flexible(
@@ -327,119 +322,20 @@ async def _wrap_sse_async(gen):
         }
 
 
-@router.post(
-    "/consultar-qdrant_hci",
-    summary="Pregunta sobre la historia clínica en Qdrant (JSON o SSE con stream=true)",
-)
-async def consultar_hc_qdrant(
-    payload: ConsultaQdrantRequest,
-    engine=Depends(get_router),
-    stream: bool = Query(False, description="Si es true, responde por SSE"),
-):
-    """
-    Un único endpoint:
-      - JSON (por defecto) -> misma lógica y filtros que stream.
-      - SSE si ?stream=true -> tokens por 'message' y cierre en 'final'.
-    """
-    try:
-        # Normalización de entrada (igual para ambos modos)
-        pregunta = unicodedata.normalize("NFKC", (payload.pregunta or "")).strip()
-        if len(pregunta) < 3:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="La pregunta es demasiado corta.",
-            )
-
-        if engine is None:
-            # Comportamiento coherente en ambos modos
-            if stream:
-                def _no_data():
-                    yield {
-                        "event": "message",
-                        "data": json.dumps({"data": "⚠️ El paciente no tiene datos cargados."}, ensure_ascii=False),
-                    }
-                    yield {
-                        "event": "final",
-                        "data": json.dumps({"answer": "", "sources": []}, ensure_ascii=False),
-                    }
-                return EventSourceResponse(
-                    _no_data(),
-                    media_type="text/event-stream",
-                    headers={
-                        "Cache-Control": "no-cache",
-                        "X-Accel-Buffering": "no",
-                        "Connection": "keep-alive",
-                    },
-                )
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="No se encontró historia clínica para el paciente especificado.",
-            )
-
-        # ───────────────────────────
-        # MODO STREAM (SSE)
-        # ───────────────────────────
-        if stream:
-            gen = stream_hc(pregunta, engine)
-            return EventSourceResponse(
-                _wrap_sse(gen),
-                media_type="text/event-stream",
-                headers={
-                    "Cache-Control": "no-cache",
-                    "X-Accel-Buffering": "no",
-                    "Connection": "keep-alive",
-                },
-            )
-
-        # ───────────────────────────
-        # MODO JSON (sin stream)
-        # ───────────────────────────
-        # query_hc usa el mismo engine/filtros del stream
-        resp: dict = await run_in_threadpool(query_hc, pregunta, engine)
-
-        if not resp or not resp.get("answer"):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Sin contenido para responder con los datos disponibles.",
-            )
-
-        sentinel = resp["answer"].strip().lstrip(" \n\r\t")
-        if sentinel.startswith("⚠️"):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=resp["answer"],
-            )
-
-        return {
-            "paciente_id": payload.paciente_id,
-            "pregunta": pregunta,
-            "respuesta": resp["answer"].strip(),
-            "sources": resp["sources"],
-        }
-
-    except HTTPException:
-        raise
-    except Exception as exc:
-        log.exception("❌ Error interno en consultar_hc_qdrant")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(exc),
-        )
-
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 🆕 ENDPOINT EXPERIMENTAL: AGENTE CLÍNICO (AGNO)
+# 🆕 ENDPOINT: AGENTE CLÍNICO (AGNO)
 # ─────────────────────────────────────────────────────────────────────────────
 @router.post(
     "/consultar-agent",
-    summary="[BETA] Consulta usando el Agente Clínico Autónomo (Model: ministral-3:3b-instruct-2512-q8_0)",
+    summary="Consulta usando el Agente Clínico Autónomo (Model:MedGemma-4B (Quantized))",
 )
 async def consultar_agente(
     payload: ConsultaQdrantRequest, 
     stream: bool = Query(False, description="Activa modo streaming SSE")
 ):
     """
-    Endpoint experimental que delega la lógica al Agente (agent_service).
+    Endpoint que delega la lógica al Agente (agent_service).
     Soporta ?stream=true para respuesta token a token (SSE).
     """
     try:
@@ -558,34 +454,5 @@ def _extraer_contenido_real(json_data: dict) -> dict:
 
     raise ValueError("No se encontró la estructura esperada con 'entrys'")
 
-'''
-class EntradaHCJson(BaseModel):
-    json_data: dict
-    user_id: int
 
 
-@router.post(
-    "/resumen-por-seccion-json-hci-completehealthhistory",
-    summary="Genera un resumen narrativo detallado y organizado por secciones, directo desde el JSON clínico",
-)
-async def generar_resumen_por_seccion(
-    payload: EntradaHCJson,
-    llm: BaseLLM = Depends(get_llm),  # ⬅️ Inyección de dependencia
-):
-    """
-    Qué hace: Resume historias clínicas completas en JSON, generando narrativas por sección, ordenadas y coherentes.
-    [ ... descripción igual ... ]
-    """
-    try:
-        data = _extraer_contenido_real(payload.json_data)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error extrayendo contenido: {e}")
-
-    try:
-        resumen = await resumir_hc_por_seccion(data, llm=llm)  # ⬅️ Pasamos el LLM
-    except Exception as e:
-        log.exception("❌ Error al generar resumen: %s", e)
-        raise HTTPException(status_code=500, detail=f"Error al generar resumen: {e}")
-
-    return {"user": payload.user_id, "resumen": resumen}
-'''
