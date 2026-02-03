@@ -41,8 +41,8 @@ for test, status, output in results:
 
 # Check for missing dependencies (simplified check)
 try:
-    import pip
-    installed_packages = {pkg.key for pkg in pip.get_installed_distributions()}
+    from importlib.metadata import distributions
+    installed_packages = {dist.name.lower().replace('_', '-') for dist in distributions()}
     required_packages = {'pytest', 'some-other-dependency'}  # Replace with actual dependencies
 
     missing_dependencies = required_packages - installed_packages
